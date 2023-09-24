@@ -6,7 +6,7 @@ module.exports={
     
     getTemperatureAir: function (callback){
         
-        firebase.database().ref('Air/humidite').once('value', function(snapshot) {
+        firebase.database().ref('humiditer sol/humiditer').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

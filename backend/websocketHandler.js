@@ -9,7 +9,7 @@ module.exports = (wsServer) => {
   }
 
   // Listen for changes in the Firebase database
-  firebase.database().ref('Air/humidite').on('value', (snapshot) => {
+  firebase.database().ref('humiditer sol/humiditer').on('value', (snapshot) => {
     const cultureData = snapshot.val();
     console.log(cultureData);
 

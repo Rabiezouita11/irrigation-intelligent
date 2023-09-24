@@ -24,6 +24,9 @@ const authRouter = require("./routes/auth");
 const bodyParser = require("body-parser");
 const db = require("./models/index");
 const cors = require("cors");
+const WebSocket = require('websocket').server;
+const wsHandler = require('./websocketHandler');
+
 // firebase database config file 
 const app = express();
 app.use(bodyParser.json());
@@ -75,141 +78,142 @@ app.use("/auth", authRouter); //path postman : http://localhost:8080/auth/login
 //   );
 // });
 // how recupere data from firebase database
-app.get("/getTime/", function (req, res) {
-  getDatafirebase.getData(function (err,data) {
-    res.send(data);
-  });
-});
+// app.get("/getTime/", function (req, res) {
+//   getDatafirebase.getData(function (err,data) {
+//     res.send(data);
+//   });
+// });
 app.get("/getTemperatureAir/", function (req, res) {
-  getTemperatureAir.getTemperatureAir(function (err,data) {
-    res.send(data);
+  getTemperatureAir.getTemperatureAir(function (err,initialData) {
+    res.json(initialData);
   });
 });
-app.get("/getMode/", function (req, res) {
-  getMode.getMode(function (err,data) {
-    res.send(data);
-  });
-});
-app.put("/changeEtatled/", function (req, res) {
-  changeEtatled.changeEtatled(req.body,function (err,data) {
-    if (err) {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving notes.",
-      });
-    } else {
-      res.send(data);
-    }
-  });
-});
-app.put("/changeEtatPompe/", function (req, res) {
-  changeEtatPompe.updateEtatpompe(req.body,function (err,data) {
-    if (err) {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving notes.",
-      });
-    } else {
-      res.send(data);
-    }
-  });
-});
-app.put("/changeEtatventilateur/", function (req, res) {
-  changeventilateur.updateEtatventilateur(req.body,function (err,data) {
-    if (err) {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving notes.",
-      });
-    } else {
-      res.send(data);
-    }
-  });
-});
+// });
+// app.get("/getMode/", function (req, res) {
+//   getMode.getMode(function (err,data) {
+//     res.send(data);
+//   });
+// });
+// app.put("/changeEtatled/", function (req, res) {
+//   changeEtatled.changeEtatled(req.body,function (err,data) {
+//     if (err) {
+//       res.status(500).send({
+//         message: err.message || "Some error occurred while retrieving notes.",
+//       });
+//     } else {
+//       res.send(data);
+//     }
+//   });
+// });
+// app.put("/changeEtatPompe/", function (req, res) {
+//   changeEtatPompe.updateEtatpompe(req.body,function (err,data) {
+//     if (err) {
+//       res.status(500).send({
+//         message: err.message || "Some error occurred while retrieving notes.",
+//       });
+//     } else {
+//       res.send(data);
+//     }
+//   });
+// });
+// app.put("/changeEtatventilateur/", function (req, res) {
+//   changeventilateur.updateEtatventilateur(req.body,function (err,data) {
+//     if (err) {
+//       res.status(500).send({
+//         message: err.message || "Some error occurred while retrieving notes.",
+//       });
+//     } else {
+//       res.send(data);
+//     }
+//   });
+// });
 
-app.put ("/SetNomCulture/", function (req, res) {
-  SetNomCulture.setNomCultrue(req.body,function (err,data) {
-    if (err) {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving notes.",
-      });
-    } else {
-      res.send(data);
-    }
-  });
-});
-app.get("/getNomCulture/", function (req, res) {
-  getNomCulture.getNomCulture(function (err,data) {
-    res.send(data);
-  });
-});
+// app.put ("/SetNomCulture/", function (req, res) {
+//   SetNomCulture.setNomCultrue(req.body,function (err,data) {
+//     if (err) {
+//       res.status(500).send({
+//         message: err.message || "Some error occurred while retrieving notes.",
+//       });
+//     } else {
+//       res.send(data);
+//     }
+//   });
+// });
+// app.get("/getNomCulture/", function (req, res) {
+//   getNomCulture.getNomCulture(function (err,data) {
+//     res.send(data);
+//   });
+// });
 
 
-app.put("/changeEtatMoteur/", function (req, res) {
+// app.put("/changeEtatMoteur/", function (req, res) {
    
-  changeEtatMoteur.updateMoteur(req.body,function (err,data) {
-    if (err) {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving notes.",
-      });
-    } else {
-      res.send(data);
-    }
+//   changeEtatMoteur.updateMoteur(req.body,function (err,data) {
+//     if (err) {
+//       res.status(500).send({
+//         message: err.message || "Some error occurred while retrieving notes.",
+//       });
+//     } else {
+//       res.send(data);
+//     }
 
-  });
-});
-app.put("/changeMode/", function (req, res) {
+//   });
+// });
+// app.put("/changeMode/", function (req, res) {
 
-    changeMode.updateMode(req.body,function (err,data) {
-      if (err) {
-        res.status(500).send({
-          message: err.message || "Some error occurred while retrieving notes.",
-        });
-      } else {
-        res.send(data);
-      }
+//     changeMode.updateMode(req.body,function (err,data) {
+//       if (err) {
+//         res.status(500).send({
+//           message: err.message || "Some error occurred while retrieving notes.",
+//         });
+//       } else {
+//         res.send(data);
+//       }
      
       
-    });
+//     });
 
  
-});
+// });
 
-app.get("/getHumiditySol/", function (req, res) {
-  getHumiditySol.getHumiditySol(function (err,data) {
-    res.send(data);
-  });
-});
-app.get("/getWaterSensor/", function (req, res) {
-  getWaterSensor.getWaterSensor(function (err,data) {
-    res.send(data);
-  });
-});
+// app.get("/getHumiditySol/", function (req, res) {
+//   getHumiditySol.getHumiditySol(function (err,data) {
+//     res.send(data);
+//   });
+// });
+// app.get("/getWaterSensor/", function (req, res) {
+//   getWaterSensor.getWaterSensor(function (err,data) {
+//     res.send(data);
+//   });
+// });
 
-app.get("/getcapteurPluie/", function (req, res) {
-  getcapteurPluie.getcapteurPluie(function (err,data) {
-    res.send(data);
-  });
-});
-app.get("/getCapteurCo2/", function (req, res) {
-  getCapteurCo2.getCaptureCo2(function (err,data) {
-    res.send(data);
-  });
-});
+// app.get("/getcapteurPluie/", function (req, res) {
+//   getcapteurPluie.getcapteurPluie(function (err,data) {
+//     res.send(data);
+//   });
+// });
+// app.get("/getCapteurCo2/", function (req, res) {
+//   getCapteurCo2.getCaptureCo2(function (err,data) {
+//     res.send(data);
+//   });
+// });
 
-app.get("/getStatusmanual/", function (req, res) {
-  getStatusmanual.getStatusmanual(function (err,data) {
-    res.send(data);
-  });
-});
-app.get("/getEtatbattrie/", function (req, res) {
-  getEtatbattrie.getEtatbattrie(function (err,data) {
-    res.send(data);
-  });
-});
+// app.get("/getStatusmanual/", function (req, res) {
+//   getStatusmanual.getStatusmanual(function (err,data) {
+//     res.send(data);
+//   });
+// });
+// app.get("/getEtatbattrie/", function (req, res) {
+//   getEtatbattrie.getEtatbattrie(function (err,data) {
+//     res.send(data);
+//   });
+// });
 
-app.get("/getNpk/", function (req, res) {
-  getNpk.getNpk(function (err,data) {
-    res.send(data);
-  });
-});
+// app.get("/getNpk/", function (req, res) {
+//   getNpk.getNpk(function (err,data) {
+//     res.send(data);
+//   });
+// });
 
 // // how update data from firebase database
 // app.put("/updateData/", function (req, res) {
@@ -241,7 +245,23 @@ app.use(function (err, req, res, next) {
   res.json({ error: err });
 });
 const server = http.createServer(app);
+const wsServer = new WebSocket({ httpServer: server });
 
+// WebSocket connection handling
+wsServer.on('request', (request) => {
+  const connection = request.accept(null, request.origin);
+  console.log('WebSocket connection established');
+
+  // Handle client WebSocket disconnection
+  connection.on('close', () => {
+    console.log('WebSocket connection closed');
+  });
+});
+
+// Use the WebSocket handler to handle Firebase changes
+wsHandler(wsServer);
+
+// Start the server
 server.listen(5000, function () {
   console.log(`server started at 5000`);
 });

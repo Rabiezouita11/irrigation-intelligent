@@ -9,18 +9,19 @@ import { environment } from 'src/environments/environment';
 import { BlankComponent } from './mocks/blank/blank.component';
 import { NavbarModule } from './components/navbar/navbar.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BlankComponent
+    BlankComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-
+    ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
 

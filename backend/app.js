@@ -74,7 +74,6 @@ admin.initializeApp({
 });
 function authenticateFirebase(req, res, next) {
   const idToken = req.headers.authorization; // The Firebase ID token passed in the request headers
-console.log(idToken);
   admin
     .auth()
     .verifyIdToken(idToken)

@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -18,12 +19,13 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     SigninComponent
+
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-
+   
     MatButtonModule,
     MatInputModule,
     MatProgressSpinnerModule,

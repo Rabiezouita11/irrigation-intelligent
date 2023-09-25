@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthenticationService } from './services/authentication.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -19,7 +19,7 @@ export class SigninComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private snackBar: MatSnackBar
+    private toastrService: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -50,9 +50,13 @@ export class SigninComponent implements OnInit {
       },
       error: (error) => {
         this.isLoggingIn = false;
-        this.snackBar.open(error.message, "OK", {
-          duration: 5000
+        this.toastrService.success(error, 'success', {
+          timeOut: 5000,
+          progressAnimation: 'increasing',
+          progressBar: true,
+          positionClass: 'toast-top-right',
         });
+
       }
     });
   }
@@ -66,17 +70,20 @@ export class SigninComponent implements OnInit {
     ).subscribe({
       next: () => {
         this.isRecoveringPassword = false;
-        this.snackBar.open("You can recover your password in your email account.", "OK", {
-          duration: 5000
-        });
-      },
+      //   this.snackBar.open("You can recover your password in your email account.", "OK", {
+      //     duration: 5000
+      //   });
+    },
       error: error => {
         this.isRecoveringPassword = false;
-        this.snackBar.open(error.message, "OK", {
-          duration: 5000
-        });
+        // this.snackBar.open(error.message, "OK", {
+        //   duration: 5000
+        // });
       }
     })
   }
+  save(){
+    this.toastrService.success('error', 'success')
 
+  }
 }

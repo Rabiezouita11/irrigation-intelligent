@@ -3,29 +3,13 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
-const getDatafirebase = require("./firebase/getTime");
 const getTemperatureAir = require("./firebase/getTemperatureHumiditerAir");
-const getcapteurPluie = require("./firebase/getCapteurPluie");
-const getMode = require("./firebase/getMode");
-const getHumiditySol = require("./firebase/getHumiditySol");
-const changeMode = require("./firebase/changerMode");
-const changeEtatMoteur = require("./firebase/changeEtatMoteur");
-const changeEtatled = require("./firebase/changeEtatled");
-const changeEtatPompe = require("./firebase/changeEtatPompe");
-const changeventilateur = require("./firebase/changeEtatventilateur");
-const getCapteurCo2 = require("./firebase/getCapteurCo2");
-const getNpk = require("./firebase/getNpk");
-const getNomCulture = require("./firebase/getNomCulture");
-const SetNomCulture = require("./firebase/SetNomCulture");
-const getEtatbattrie = require("./firebase/getEtatbattrie");
-const getStatusmanual = require("./firebase/getStatusmanual");
-const getWaterSensor = require("./firebase/getWaterSensor");
-const authRouter = require("./routes/auth");
 const bodyParser = require("body-parser");
-const db = require("./models/index");
 const cors = require("cors");
 const WebSocket = require('websocket').server;
 const wsHandler = require('./websocketHandler');
+const admin = require("firebase-admin");
+var serviceAccount = require("../backend/iot-irrigation-smart-firebase-adminsdk-4uxxh-9a380ecbf8.json");
 
 // firebase database config file 
 const app = express();
@@ -44,15 +28,15 @@ app.use(
   })
 );
 
-db.sequelize
-  .sync() // { force: true } will drop the table if it already exists
-  .then(() => {
-    console.log("Synced db.");
-  })
-  .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
-  });
-db.sequelize.options.logging = false;
+// db.sequelize
+//   .sync() // { force: true } will drop the table if it already exists
+//   .then(() => {
+//     console.log("Synced db.");
+//   })
+//   .catch((err) => {
+//     console.log("Failed to sync db: " + err.message);
+//   });
+// db.sequelize.options.logging = false;
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'jade');
@@ -64,7 +48,7 @@ app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
 ; //path postman : http://localhost:3000/deletd/remove/1.jpg )
 
-app.use("/auth", authRouter); //path postman : http://localhost:8080/auth/login
+// app.use("/auth", authRouter); //path postman : http://localhost:8080/auth/login
 // http://localhost:8080/users
 
 
@@ -83,8 +67,30 @@ app.use("/auth", authRouter); //path postman : http://localhost:8080/auth/login
 //     res.send(data);
 //   });
 // });
-app.get("/getTemperatureAir/", function (req, res) {
-  getTemperatureAir.getTemperatureAir(function (err,initialData) {
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://iot-irrigation-smart-default-rtdb.firebaseio.com"
+});
+function authenticateFirebase(req, res, next) {
+  const idToken = req.headers.authorization; // The Firebase ID token passed in the request headers
+console.log(idToken);
+  admin
+    .auth()
+    .verifyIdToken(idToken)
+    .then((decodedToken) => {
+      // Authentication successful, user is authenticated
+      req.user = decodedToken;
+      next();
+    })
+    .catch((error) => {
+      console.log(error)
+      // Authentication failed, unauthorized access
+      res.status(401).json({ message: "Unauthorized" });
+    });
+}
+app.get("/getTemperatureAir/", authenticateFirebase, function (req, res) {
+  getTemperatureAir.getTemperatureAir(function (err, initialData) {
     res.json(initialData);
   });
 });
@@ -236,7 +242,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};

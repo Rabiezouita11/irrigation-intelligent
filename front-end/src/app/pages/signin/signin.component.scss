@@ -1,0 +1,50 @@
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 100vh;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    button,
+    mat-form-field {
+        width: -webkit-fill-available;
+    }
+    mat-form-field {
+        margin-bottom: 10px;
+    }
+
+    button {
+        margin: 5px 0;
+
+        &[mat-button] {
+            width: auto;
+        }
+    }
+
+    .aligned-to-right {
+        display: flex;
+        justify-content: end;
+        align-items: end;
+        width: 100%;
+    }
+}
+
+.button-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.recover-password {
+    padding-left: 62px;
+    padding-right: 62px;
+}

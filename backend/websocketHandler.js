@@ -11,7 +11,7 @@ module.exports = (wsServer) => {
   // Listen for changes in the Firebase database
   firebase.database().ref('humiditer sol/humiditer').on('value', (snapshot) => {
     const cultureData = snapshot.val();
-    console.log(cultureData);
+  
 
     // Send the initial culture data to WebSocket clients when it changes
     sendToClients({ cultureData });

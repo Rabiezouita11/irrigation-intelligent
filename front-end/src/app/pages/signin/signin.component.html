@@ -1,4 +1,4 @@
-
+<!-- 
   <button  (click)="save()">aaa</button>
 <main>
   
@@ -42,4 +42,112 @@
         </button>
         <button mat-stroked-button color="primary">REGISTER</button>
     </form>
-</main>
+</main> -->
+
+
+
+<body>
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div id="preloader" class="preloader">
+        <div class='inner'>
+            <div class='line1'></div>
+            <div class='line2'></div>
+            <div class='line3'></div>
+        </div>
+    </div>
+    <section class="fxt-template-animation fxt-template-layout24" >
+        <!-- Video Area Start Here -->
+        <div class="fxt-video-background">
+            <div class="fxt-video">
+                <div id="fxtVideo" data-property="{
+                    videoURL:'SxE3bBOmcqY', 
+                    autoPlay:true,  
+                    mute:true, 
+                    loop:true, 
+                    startAt:0, 
+                    opacity:1, 
+                    quality:'large',  // Set the quality to 720p HD
+                  
+                    containment:'.fxt-video-background'
+                }">
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Area Start Here -->
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-lg-3">
+                    <div class="fxt-header">
+                        <a href="login-24.html" class="fxt-logo"><img src="assets/login/img/logo-24.png" alt="Logo"></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="fxt-content">
+                        <h2>Login into your account</h2>
+                        <div class="fxt-form">
+                            <form [formGroup]="form">
+                                <div class="form-group">
+                                    <div class="fxt-transformY-50 fxt-transition-delay-1">
+                                        <input type="email" id="email" class="form-control" formControlName="email"
+                                            name="email" placeholder="Email" required="required">
+                                    </div>
+                                    <div style="color: red;" *ngIf="form.get('email')!.hasError('required')">
+                                        Email is required
+                                    </div>
+                                    <div style="color: red;" *ngIf="form.get('email')!.hasError('email')">
+                                        Email is invalid
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="fxt-transformY-50 fxt-transition-delay-2">
+
+
+                                        <input id="password" type="password" formControlName="password"
+                                            class="form-control" name="password" placeholder="********"
+                                            required="required">
+                                        <i toggle="#password" class="fa fa-fw fa-eye toggle-password field-icon"></i>
+                                        <div style="color: red;" *ngIf="form.get('password')!.hasError('required')">
+                                            password is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="fxt-transformY-50 fxt-transition-delay-3">
+                                        <div class="fxt-checkbox-area">
+                                            <div class="checkbox">
+                                                <input id="checkbox1" type="checkbox">
+                                                <label for="checkbox1">Keep me logged in</label>
+                                            </div>
+                                            <a (click)="recoverPassword()"   *ngIf="!isRecoveringPassword" class="switcher-text">Forgot Password</a>
+                                            <!-- <button [disabled]="!form.get('email')!.valid" (click)="recoverPassword()"
+                                                *ngIf="!isRecoveringPassword" class="switcher-text">Forgot Password</button> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="fxt-transformY-50 fxt-transition-delay-4">
+                                        <button [disabled]="!form.valid" (click)="login()" *ngIf="!isLoggingIn"
+                                            class="fxt-btn-fill">Log in</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="fxt-footer">
+                            <div class="fxt-transformY-50 fxt-transition-delay-9">
+                                <p>Don't have an account?<a href="register-24.html"
+                                        class="switcher-text2 inline-text">Register</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- jquery-->
+
+
+</body>

@@ -11,10 +11,12 @@ import { NavbarModule } from './components/navbar/navbar.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     BlankComponent,
+  
   ],
   imports: [
     BrowserModule,

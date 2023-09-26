@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NavbarModule } from 'src/app/components/navbar/navbar.module';
 import { AuthGuard } from 'src/app/auth.guard';
 
+
 const routes: Routes = [
   {
     path: '',
@@ -14,7 +15,8 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
+
   ],
   imports: [
     CommonModule,

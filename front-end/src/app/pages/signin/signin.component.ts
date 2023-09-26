@@ -14,6 +14,11 @@ const SCRIPT_PATH_LIST = [
   "assets/login/js/jquery.mb.YTPlayer.min.js",
   "assets/login/js/validator.min.js",
   "assets/login/js/main.js",
+  "assets/bundles/libscripts.bundle.js",
+  "assets/bundles/vendorscripts.bundle.js",
+  "assets/bundles/c3.bundle.js",
+  "assets/bundles/mainscripts.bundle.js",
+  "assets/iot.js",
 ]
 
 @Component({

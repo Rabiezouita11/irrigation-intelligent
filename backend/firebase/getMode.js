@@ -6,7 +6,7 @@ module.exports={
     
     getMode: function (callback){
         
-        firebase.database().ref('Mode/').once('value', function(snapshot) {
+        firebase.database().ref('Mode/status').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

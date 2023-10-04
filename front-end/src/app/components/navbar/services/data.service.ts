@@ -23,6 +23,109 @@ export class DataService {
     return this.httpClient.get('http://localhost:5000/CapteurDePluie', { headers });
   }
 
+
+  getCapteurNiveauDeau(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/CapteurDeNiveauEau', { headers });
+  }
+
+
+  getHistorique(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/Historique', { headers });
+  }
+
+  getHumiditerAgriculteur(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/HimiditerAgriculteur', { headers });
+  }
+
+
+  getHumiditerSol(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/HimiditerSol', { headers });
+  }
+  getMode(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/Mode', { headers });
+  }
+  getpompe(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/Pompe', { headers });
+  }
+  getStatusSystem(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/StatusSystem', { headers });
+  }
+  getSystem(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/System', { headers });
+  }
+
   getTemperatureAirData(): Observable<any> {
     // Retrieve the Firebase ID token from localStorage
     const firebaseIdToken = localStorage.getItem('firebaseIdToken');

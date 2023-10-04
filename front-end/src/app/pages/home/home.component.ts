@@ -26,6 +26,10 @@ export class HomeComponent implements OnInit {
   weatherdata: any;
   nom: any;
   getCapteurDepluie: any;
+  getMode: any;
+  getStatusSystem: any;
+  getSystem: any;
+  getCapteurNiveauDeau: any;
   constructor(private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
     private cdr: ChangeDetectorRef, private dataService: DataService, private ScriptServiceService: ScriptService,
     private renderer: Renderer2, private authenticationService: AuthenticationService, private router: Router
@@ -51,7 +55,7 @@ export class HomeComponent implements OnInit {
       console.log(this.currentUserEmail);
     });
     this.getCapteurDePluie();
-
+    this.Mode();
     this.getWeather();
     this.getProfile();
   }
@@ -77,11 +81,48 @@ export class HomeComponent implements OnInit {
   getCapteurDePluie() {
     this.dataService.getCapteurDepluie().subscribe((initialData) => {
       this.getCapteurDepluie = initialData;
-console.log('aaa'+ this.getCapteurDepluie)
+      console.log('aaa' + this.getCapteurDepluie)
       // Initialize WebSocket connection to listen for updates
       this.initWebSocket();
     });
   }
+  Mode() {
+    this.dataService.getMode().subscribe((initialData) => {
+      this.getMode = initialData;
+      console.log('aaa' + this.getMode)
+      // Initialize WebSocket connection to listen for updates
+
+    });
+
+  }
+  statusSystem() {
+    this.dataService.getStatusSystem().subscribe((initialData) => {
+      this.getStatusSystem = initialData;
+      console.log('aaa' + this.getStatusSystem)
+      // Initialize WebSocket connection to listen for updates
+      this.initWebSocket();
+    });
+
+  }
+  System() {
+    this.dataService.getSystem().subscribe((initialData) => {
+      this.getSystem = initialData;
+      console.log('aaa' + this.getSystem)
+      // Initialize WebSocket connection to listen for updates
+      this.initWebSocket();
+    });
+  }
+  CapteurNiveauDeau() {
+    this.dataService.getCapteurNiveauDeau().subscribe((initialData) => {
+      this.getCapteurNiveauDeau = initialData;
+      console.log('aaa' + this.getCapteurNiveauDeau)
+      // Initialize WebSocket connection to listen for updates
+      this.initWebSocket();
+    });
+  }
+
+
+
   getProfile() {
     this.dataService.getProfile().subscribe((Profiledata) => {
       this.nom = Profiledata.nom;

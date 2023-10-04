@@ -4,9 +4,9 @@ module.exports={
 
 
     
-    getHumiditySol: function (callback){
+    getpompe: function (callback){
         
-        firebase.database().ref('Sol/').once('value', function(snapshot) {
+        firebase.database().ref('System_irrigation_smart/pompe/status').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

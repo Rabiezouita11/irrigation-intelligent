@@ -4,9 +4,9 @@ module.exports={
 
 
     
-    getWaterSensor: function (callback){
+    getProfile: function (callback){
         
-        firebase.database().ref('waterSensor/').once('value', function(snapshot) {
+        firebase.database().ref('Profile/').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

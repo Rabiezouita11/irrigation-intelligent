@@ -4,9 +4,9 @@ module.exports={
 
 
     
-    getCaptureCo2: function (callback){
+    getSystem: function (callback){
         
-        firebase.database().ref('capteur Co2/').once('value', function(snapshot) {
+        firebase.database().ref('System/status').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

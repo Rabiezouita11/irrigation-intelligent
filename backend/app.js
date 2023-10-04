@@ -3,7 +3,41 @@ var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
-const getTemperatureAir = require("./firebase/getTemperatureHumiditerAir");
+
+
+
+const getProfile = require("./firebase/profile");
+const getCapteurDepluie = require('./firebase/getCapteurDepluie');
+
+const getCapteurNiveauDeau = require('./firebase/getCapteurNiveauDeau');
+
+const getHistorique = require('./firebase/getHistorique');
+
+
+const getHumiditerAgriculteur = require('./firebase/getHumiditerAgriculteur');
+
+
+const getHumiditerSol = require('./firebase/getHumiditerSol');
+
+
+const getMode = require('./firebase/getMode');
+
+const getpompe = require('./firebase/getpompe');
+
+const getStatusSystem = require('./firebase/getStatusSystem');
+
+
+const getSystem = require('./firebase/GetSystem');
+
+
+
+
+
+
+
+
+
+
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const WebSocket = require('websocket').server;
@@ -88,11 +122,72 @@ function authenticateFirebase(req, res, next) {
       res.status(401).json({ message: "Unauthorized" });
     });
 }
-app.get("/getTemperatureAir/", authenticateFirebase, function (req, res) {
-  getTemperatureAir.getTemperatureAir(function (err, initialData) {
+
+app.get("/Profile/", authenticateFirebase, function (req, res) {
+  getProfile.getProfile(function (err, initialData) {
     res.json(initialData);
   });
 });
+
+app.get("/CapteurDePluie/", authenticateFirebase, function (req, res) {
+  getCapteurDepluie.getCapteurDepluie(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+
+app.get("/CapteurDeNiveauEau/", authenticateFirebase, function (req, res) {
+  getCapteurNiveauDeau.getCapteurNiveauDeau(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+app.get("/Historique/", authenticateFirebase, function (req, res) {
+  getHistorique.getHistorique(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+app.get("/HimiditerAgriculteur/", authenticateFirebase, function (req, res) {
+  getHumiditerAgriculteur.getHumiditerAgriculteur(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+app.get("/HimiditerSol/", authenticateFirebase, function (req, res) {
+  getHumiditerSol.getHumiditeSol(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+
+app.get("/Mode/", authenticateFirebase, function (req, res) {
+  getMode.getMode(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+
+app.get("/Pompe/", authenticateFirebase, function (req, res) {
+  getpompe.getpompe(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+app.get("/StatusSystem/", authenticateFirebase, function (req, res) {
+  getStatusSystem.getStatusSystem(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+app.get("/System/", authenticateFirebase, function (req, res) {
+  getSystem.getSystem(function (err, initialData) {
+    res.json(initialData);
+  });
+});
+
+
+
 // });
 // app.get("/getMode/", function (req, res) {
 //   getMode.getMode(function (err,data) {

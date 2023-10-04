@@ -4,9 +4,9 @@ module.exports={
 
 
     
-    getNpk: function (callback){
+    getHumiditerAgriculteur: function (callback){
         
-        firebase.database().ref('npk/').once('value', function(snapshot) {
+        firebase.database().ref('humiditer_agriculteur/status').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

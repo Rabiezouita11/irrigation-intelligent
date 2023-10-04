@@ -107,13 +107,13 @@
                     <img src="assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture">
                     <div class="dropdown">
                         <span>Welcome,</span>
-                        <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>Pamela Petrus</strong></a>
+                        <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>{{nom}}</strong></a>
                         <ul class="dropdown-menu dropdown-menu-right account">
                             <li><a href="page-profile2.html"><i class="icon-user"></i>My Profile</a></li>
                             <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
                             <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
                             <li class="divider"></li>
-                            <li><a href="page-login.html"><i class="icon-power"></i>Logout</a></li>
+                            <li><a  (click)="logout()"><i class="icon-power"></i>Logout</a></li>
                         </ul>
                     </div>
                     <hr>
@@ -558,7 +558,7 @@
                             <div class="body d-flex justify-content-between">
                                 <div>
                                     <h6 class="mb-0">Security System</h6>
-                                    <small class="text-success">Triggered</small><small class="text-danger d-none">Loosed</small>
+                                    <small class="text-success">{{getCapteurDepluie}}</small><small class="text-danger d-none">Loosed</small>
                                 </div>
                                 <div>
                                     <button class="btn btn-outline-danger" type="button">Loose</button>
@@ -629,6 +629,17 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 col-sm-12">
+                        <div class="container">
+                            <i class="fa-solid fa-sun"></i>
+                            <div class="row" style="font-size : 32px;margin-top: 5px">{{weatherdata.temp_celcius}}°</div>
+                            <div class="row" style="font-size : 12px;">{{weatherdata.temp_min}}°/ {{weatherdata.temp_max}}°</div>
+                            <div class="row" style="font-size : 12px;">Feels like : {{weatherdata.feels_like}}°</div>
+                            <div class="row" style="font-size : 25px;margin-top: 10px">{{weatherdata.name}}</div>
+                            <div class="row" style="font-size : 12px;">Humidity : {{weatherdata.main.humidity}}%</div>
+                            
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12">
                         <div class="card">
                             <div class="header">
                                 <h2>Day/Night Use</h2>
@@ -648,6 +659,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
                 
                 <div class="row clearfix row-deck">

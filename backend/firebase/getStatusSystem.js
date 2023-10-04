@@ -1,9 +1,12 @@
 const firebase =  require('./firebaseConfg.js');
 
 module.exports={
-    getNomCulture: function (callback){
+
+
+    
+    getStatusSystem: function (callback){
         
-        firebase.database().ref('culture/').once('value', function(snapshot) {
+        firebase.database().ref('Status_du_system/status').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

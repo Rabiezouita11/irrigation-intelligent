@@ -4,9 +4,9 @@ module.exports={
 
 
     
-    getEtatbattrie: function (callback){
+    getHistorique: function (callback){
         
-        firebase.database().ref('EtatBattrie/').once('value', function(snapshot) {
+        firebase.database().ref('historique/exemple').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

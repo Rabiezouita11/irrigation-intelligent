@@ -4,9 +4,9 @@ module.exports={
 
 
     
-    getData: function (callback){
+    getHumiditeSol: function (callback){
         
-        firebase.database().ref('wifi/').once('value', function(snapshot) {
+        firebase.database().ref('System_irrigation_smart/humidite_du_sol/value').once('value', function(snapshot) {
             callback(null, snapshot.val());
             
         });

@@ -71,7 +71,10 @@ export class SigninComponent implements OnInit {
           this.authenticationService.storeFirebaseIdToken(firebaseIdToken);
 
           // Navigate to the 'home' route
-          this.router.navigate(['home']);
+      
+          this.router.navigate(['/home']).then(() => {
+            window.location.reload();
+          });
         });
       },
       error: (error) => {

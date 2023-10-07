@@ -3,7 +3,7 @@
     <div id="wrapper" class="theme-cyan">
 
         <!-- Page Loader -->
-       
+
         <!-- Top navbar div start -->
         <nav class="navbar navbar-fixed-top">
             <div class="container-fluid">
@@ -519,18 +519,7 @@
         </div>
 
         <!-- rightbar icon div -->
-        <div class="right_icon_bar">
-            <ul>
-                <li><a href="app-inbox.html"><i class="fa fa-envelope"></i></a></li>
-                <li><a href="app-chat.html"><i class="fa fa-comments"></i></a></li>
-                <li><a href="app-calendar.html"><i class="fa fa-calendar"></i></a></li>
-                <li><a href="file-dashboard.html"><i class="fa fa-folder"></i></a></li>
-                <li><a href="app-contact.html"><i class="fa fa-id-card"></i></a></li>
-                <li><a href="blog-list.html"><i class="fa fa-globe"></i></a></li>
-                <li><a href="javascript:void(0);"><i class="fa fa-plus"></i></a></li>
-                <li><a href="javascript:void(0);" class="right_icon_btn"><i class="fa fa-angle-right"></i></a></li>
-            </ul>
-        </div>
+
 
         <!-- mani page content body part -->
         <div id="main-content">
@@ -546,19 +535,7 @@
                                 <li class="breadcrumb-item active">IOT</li>
                             </ul>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12">
-                            <div class="d-flex flex-row-reverse">
-                                <div class="page_action">
-                                    <button type="button" class="btn btn-primary"><i class="fa fa-download"></i>
-                                        Download report</button>
-                                    <button type="button" class="btn btn-secondary"><i class="fa fa-send"></i> Send
-                                        report</button>
-                                </div>
-                                <div class="p-2 d-flex">
 
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -566,32 +543,26 @@
                     <div class="col-lg-3 col-md-6 col-sm-6">
                         <div class="card number-chart">
                             <div class="body">
-                                <span class="text-uppercase">ENERGY USE</span>
-                                <h4 class="mb-0 mt-2">250 kw/h <i class="fa fa-level-up font-12"></i></h4>
-                                <small class="text-muted">Analytics for last week</small>
+                                <span class="text-uppercase">
+                                    humiditer agriculteur</span>
+                                <h4 class="mb-0 mt-2">{{getHumiditerAgriculteur}}% </h4>
+                                <button class="btn btn-outline-danger" type="button">changer Humiditer</button>
+                            </div>
+                            <div>
+                              
+
                             </div>
                             <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90"
                                 data-width="100%" data-height="95px" data-line-Width="1" data-line-Color="#39afa6"
                                 data-fill-Color="#73cec7">4,1,5,2,7,3,4</div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
-                        <div class="card number-chart">
-                            <div class="body">
-                                <span class="text-uppercase">LIGHTS</span>
-                                <h4 class="mb-0 mt-2">6 Lights are ON</h4>
-                                <small class="text-muted">Analytics for last week</small>
-                            </div>
-                            <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90"
-                                data-width="100%" data-height="95px" data-line-Width="1" data-line-Color="#ffa901"
-                                data-fill-Color="#efc26b">1,4,2,3,6,2</div>
-                        </div>
-                    </div>
+
                     <div class="col-lg-3 col-md-6 col-sm-6">
                         <div class="card number-chart">
                             <div class="body">
                                 <span class="text-uppercase">Humiditer du sol </span>
-                                <h4 class="mb-0 mt-2">{{getHumiditerSol}}° C</h4>
+                                <h4 class="mb-0 mt-2">{{getHumiditerSol}}%</h4>
                                 <small class="text-muted">Analytics for last week</small>
                             </div>
                             <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90"
@@ -603,53 +574,50 @@
                         <div class="card">
                             <div class="body d-flex justify-content-between">
                                 <div>
-                                    <h6 class="mb-0">Security System</h6>
-                                    <small class="text-success">{{getCapteurDepluie}}</small><small
+                                    <h6 class="mb-0">System Mode </h6>
+                                    <small class="text-success" style="font-size: 20px;">{{getMode}}</small><small
                                         class="text-danger d-none">Loosed</small>
                                 </div>
                                 <div>
-                                    <button class="btn btn-outline-danger" type="button">Loose</button>
+                                    <button class="btn btn-outline-danger" type="button">changer</button>
                                     <button class="btn btn-outline-success d-none" type="button">Trigger</button>
                                 </div>
                             </div>
                             <hr>
                             <div class="body d-flex justify-content-between">
                                 <div>
-                                    <h6 class="mb-0">Main Gate</h6>
+                                    <h6 class="mb-0">Status System</h6>
                                     <small class="text-success d-none">Closed</small><small
-                                        class="text-danger">Opened</small>
+                                        class="text-danger"style="font-size: 20px;">{{getStatusSystem}}</small>
                                 </div>
                                 <div>
                                     <button class="btn btn-outline-danger d-none" type="button">Open</button>
-                                    <button class="btn btn-outline-success" type="button">Close</button>
+
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card">
+                            <div class="body d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-0">System </h6>
+                                    <small class="text-success" style="font-size: 20px;">{{getSystem}}</small><small
+                                        class="text-danger d-none">Loosed</small>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-danger" type="button">changer</button>
+                                    <button class="btn btn-outline-success d-none" type="button">Trigger</button>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
 
                 <div class="row clearfix row-deck">
-                    <div class="col-lg-5 col-md-12 col-sm-12">
-                        <div class="card">
-                            <div class="header">
-                                <h2>Spending by Year</h2>
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"
-                                            role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a href="javascript:void(0);">Action</a></li>
-                                            <li><a href="javascript:void(0);">Another Action</a></li>
-                                            <li><a href="javascript:void(0);">Something else</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="body">
-                                <div id="Google-Analytics-Dashboard" style="height: 210px"></div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="card appliances-grp">
                             <div class="body clearfix">
@@ -682,59 +650,24 @@
                         <div class="card weather3">
                             <div class="top">
                                 <div class="wrapper">
-                                    <h2 class="heading">{{ weatherdata.weather }}</h2>
-                                    <h3 class="location">{{ weatherdata.city_name }}, {{ weatherdata.country_code }}</h3>
+                                    <h2 class="heading" style="color:white;">{{ weatherdata.weather }}</h2>
+                                    <h3 class="location" style="color:white;">{{ weatherdata.city_name }}, {{
+                                        weatherdata.country_code }}</h3>
                                     <p class="temp">
-                                        <span class="temp-value">23</span>
-                                        <span class="deg">0</span>
+                                        <span class="deg" style="color:white;">0</span>
                                         <a href="javascript:void(0);"><span class="temp-type">C</span></a>
+                                        <span class="temp-value" style="color:white;">{{weatherdata.app_temp}}</span>
+
                                     </p>
                                 </div>
                             </div>
-                            <div class="bottom">
-                                <ul class="forecast">
-                                    <li class="active">
-                                        <span class="date">Yesterday</span>
-                                        <span class="wi wi-day-hail condition">
-                                            <span class="temp">23<span class="deg">0</span><span
-                                                    class="temp-type">C</span></span>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="date">Tomorrow</span>
-                                        <span class="wi wi-day-hail condition">
-                                            <span class="temp">21<span class="deg">0</span><span
-                                                    class="temp-type">C</span></span>
-                                        </span>
-                                    </li>
-                                </ul>
-                            </div>
+
                         </div>
                         <div *ngIf="!weatherdata">
                             <p>Loading weather data...</p>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-12">
-                        <div class="card">
-                            <div class="header">
-                                <h2>Day/Night Use</h2>
-                                <ul class="header-dropdown">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"
-                                            role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a href="javascript:void(0);">Action</a></li>
-                                            <li><a href="javascript:void(0);">Another Action</a></li>
-                                            <li><a href="javascript:void(0);">Something else</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="body">
-                                <div id="DayNight-Use" style="height: 13rem"></div>
-                            </div>
-                        </div>
-                    </div>
+
 
                 </div>
 

@@ -64,7 +64,9 @@ export class HomeComponent implements OnInit {
     this.Mode();
     this.getProfile();
     this.HimiditerSol();
-
+    this.System();
+    this.HimiditerAgriculteur();
+    this.statusSystem();
     this.weatherService.getCurrentLocation().subscribe(
       (coords) => {
         console.log(coords)
@@ -94,8 +96,8 @@ export class HomeComponent implements OnInit {
       max_temp: data.data[0].max_temp,
       app_temp: data.data[0].app_temp,
       sunset: data.data[0].sunset,
-      weather : data.data[0].weather.description,
-      
+      weather: data.data[0].weather.description,
+
       // Add other properties as needed
     };
   }
@@ -177,7 +179,7 @@ export class HomeComponent implements OnInit {
           // Handle other errors as needed
           console.error('An error occurred:', error);
         }
-        
+
         // Rethrow the error so that it can be caught by the subscriber
         return throwError(error);
       })
@@ -204,6 +206,15 @@ export class HomeComponent implements OnInit {
         // Manually trigger change detection
         this.cdr.detectChanges();
       }
+      if (message.getStatusSystem !== undefined) {
+        // Update with the real-time data
+        this.getStatusSystem = message.getStatusSystem;
+
+        // Manually trigger change detection
+        this.cdr.detectChanges();
+      }
+      
+   
     });
   }
   logout() {

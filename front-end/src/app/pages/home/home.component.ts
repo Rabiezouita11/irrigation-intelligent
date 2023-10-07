@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { WeatherService } from 'src/app/components/navbar/services/weather.service';
 import { catchError, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
 
 const SCRIPT_PATH_LIST = [
   "assets/bundles/libscripts.bundle.js",
@@ -37,9 +38,13 @@ export class HomeComponent implements OnInit {
   getpompe: any;
   getHumiditerAgriculteur: any;
   mode: any;
+  pompeState: boolean = false; // Initialize to the desired initial state
+  humidity!: number ; // You can initialize it as needed
+
   constructor(private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
     private cdr: ChangeDetectorRef, private dataService: DataService, private ScriptServiceService: ScriptService,
     private renderer: Renderer2, private authenticationService: AuthenticationService, private router: Router, private weatherService: WeatherService, private toastrService: ToastrService,
+
 
   ) { }
 
@@ -230,6 +235,13 @@ export class HomeComponent implements OnInit {
         // Manually trigger change detection
         this.cdr.detectChanges();
       }
+      if (message.getpompe !== undefined) {
+        // Update with the real-time data
+        this.getpompe = message.getpompe;
+
+        // Manually trigger change detection
+        this.cdr.detectChanges();
+      }
 
 
 
@@ -250,4 +262,75 @@ export class HomeComponent implements OnInit {
     this.toastrService.success(mode, 'Mode System', { timeOut: 7000 }); // Display custom error message in a toast
     this.ngOnInit();
   }
+  changePompe(event: any) {
+    const newState = event.target.checked; // Get the new state from the checkbox
+
+    // Check if the water level is low and the pump is not turned on
+    if (this.getCapteurNiveauDeau === 'low') {
+      // Show an error toast
+      this.toastrService.error('Water level is low. Verify the water level and turn on the pump if needed.', 'Error', { timeOut: 7000 });
+      return; // Stop further execution
+    }
+
+    // Call the service method to change the state (you can pass newState to the service)
+    this.dataService.changePompe(newState).subscribe(
+      (response) => {
+        // Handle the response if needed
+        console.log(response);
+      },
+      (error) => {
+        // Handle errors if needed
+        console.error(error);
+      }
+    );
+
+    // Update the toast message based on the new state
+    const message = newState ? 'POMPE is ON' : 'POMPE is OFF';
+    const toastType = newState ? 'success' : 'info';
+
+    if (toastType === 'info') {
+      this.toastrService.info(message, 'Status Pompe', { timeOut: 7000 });
+    } else {
+      this.toastrService.success(message, 'Status Pompe', { timeOut: 7000 });
+    }
+
+    // Update the component's state
+    this.pompeState = newState;
+  }
+
+  changeSystem(status: string) {
+    this.dataService.changeSystem(status).subscribe(
+
+    );
+
+    if (this.getSystem === 'OFF') {
+      this.toastrService.success(status, 'Status System', { timeOut: 7000 }); // Display custom error message in a toast
+
+    } else {
+      this.toastrService.warning(status, 'Status System', { timeOut: 7000 }); // Display custom error message in a toast
+
+    }
+    this.ngOnInit();
+  }
+  saveChanges() {
+    console.log(this.humidity);
+    if (this.humidity === null) {
+      this.toastrService.error(`Humidity required`, 'Humidity validation', { timeOut: 7000 });
+      return
+    }
+    if (isNaN(this.humidity)) {
+      // Handle the case where the form is invalid or the input is not a valid number
+      this.toastrService.error(`Please enter a valid numeric value for humidity.`, 'Humidity validation', { timeOut: 7000 });
+      return;
+    }
+    if (isNaN(this.humidity) || this.humidity <= 0) {
+      // Handle the case where the input is not a valid number or is less than 0
+      this.toastrService.error(`Please enter a valid numeric value greater than  0 for humidity.`, 'Humidity validation', { timeOut: 7000 });
+      return;
+    }
+    this.dataService.changerHumiditerAgriculture(this.humidity).subscribe();
+    this.toastrService.success(`Humidity level changed to ${this.humidity}%`, 'Humidity Change', { timeOut: 7000 });
+    this.ngOnInit();
+  }
+
 }

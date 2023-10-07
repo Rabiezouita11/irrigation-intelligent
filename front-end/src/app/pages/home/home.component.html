@@ -115,24 +115,24 @@
                         </ul>
                     </div>
                     <hr>
-                  
+
                 </div>
                 <!-- Nav tabs -->
-              
+
 
                 <!-- Tab panes -->
                 <div class="tab-content padding-0">
                     <div class="tab-pane active" id="menu">
                         <nav id="left-sidebar-nav" class="sidebar-nav">
                             <ul id="main-menu" class="metismenu li_animation_delay">
-                              
+
                                 <li>
                                     <a href="#App" class="has-arrow"><span>Accueil</span></a>
-                                   
+
                                 </li>
                                 <li>
                                     <a href="#App" class="has-arrow"><span>Historique</span></a>
-                                   
+
                                 </li>
                             </ul>
                         </nav>
@@ -356,16 +356,18 @@
                 </div>
 
                 <div class="row clearfix row-deck">
-                    <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON'">
                         <div class="card number-chart">
                             <div class="body">
                                 <span class="text-uppercase">
                                     humiditer agriculteur</span>
                                 <h4 class="mb-0 mt-2">{{getHumiditerAgriculteur}}% </h4>
-                                <button class="btn btn-outline-danger" type="button">changer Humiditer</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    changer Humiditer
+                                  </button>
                             </div>
                             <div>
-                              
+
 
                             </div>
                             <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90"
@@ -374,7 +376,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON'">
                         <div class="card number-chart">
                             <div class="body">
                                 <span class="text-uppercase">Humiditer du sol </span>
@@ -386,25 +388,27 @@
                                 data-fill-Color="#84d4a6">1,4,2,3,1,5</div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON'">
                         <div class="card">
-                            <div class="body d-flex justify-content-between">
+                            <div class="body d-flex justify-content-between" *ngIf="getSystem === 'ON'">
                                 <div>
                                     <h6 class="mb-0">System Mode </h6>
                                     <small class="text-success" style="font-size: 20px;">{{getMode}}</small><small
                                         class="text-danger d-none">Loosed</small>
                                 </div>
                                 <div>
-                                    <button class="btn btn-outline-danger" *ngIf="getMode === 'manual'" (click)="changeMode('automatic')" type="button"> mode automatic</button>
-                                    <button class="btn btn-outline-success" *ngIf="getMode === 'automatic'" (click)="changeMode('manual')" type="button">mode manual</button>
+                                    <button class="btn btn-outline-danger" *ngIf="getMode === 'manual'"
+                                        (click)="changeMode('automatic')" type="button"> mode automatic</button>
+                                    <button class="btn btn-outline-success" *ngIf="getMode === 'automatic'"
+                                        (click)="changeMode('manual')" type="button">mode manual</button>
                                 </div>
                             </div>
                             <hr>
-                            <div class="body d-flex justify-content-between">
+                            <div class="body d-flex justify-content-between" *ngIf="getSystem === 'ON'">
                                 <div>
                                     <h6 class="mb-0">Status System</h6>
-                                    <small class="text-success d-none">Closed</small><small
-                                        class="text-danger"style="font-size: 20px;">{{getStatusSystem}}</small>
+                                    <small class="text-success d-none">Closed</small><small class="text-danger"
+                                        style="font-size: 20px;">{{getStatusSystem}}</small>
                                 </div>
                                 <div>
                                     <button class="btn btn-outline-danger d-none" type="button">Open</button>
@@ -413,28 +417,45 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="col-lg-3 col-md-6 col-sm-6"  *ngIf="getSystem === 'ON'">
                         <div class="card">
                             <div class="body d-flex justify-content-between">
                                 <div>
                                     <h6 class="mb-0">System </h6>
-                                    <small class="text-success" style="font-size: 20px;">{{getSystem}}</small><small
-                                        class="text-danger d-none">Loosed</small>
+                                    <small style="font-size: 20px;"
+                                        [ngClass]="{'text-success': getSystem === 'ON', 'text-danger': getSystem !== 'ON'}">{{getSystem}}</small>
+
+
                                 </div>
                                 <div>
-                                    <button class="btn btn-outline-danger" type="button">changer</button>
-                                    <button class="btn btn-outline-success d-none" type="button">Trigger</button>
+                                    <button class="btn btn-outline-danger" *ngIf="getSystem === 'ON'"
+                                        (click)="changeSystem('OFF')" type="button">System OFF</button>
+                                    <button class="btn btn-outline-success" *ngIf="getSystem === 'OFF'"
+                                        (click)="changeSystem('ON')" type="button">System ON</button>
                                 </div>
                             </div>
 
 
                         </div>
                     </div>
+                    <div class="row justify-content-center" *ngIf="getSystem === 'OFF'">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title text-danger">Smart Irrigation System is OFF</h5>
+                                    <p class="card-text">The IoT system is currently turned off. To activate it, click
+                                        the button below.</p>
+                                    <button class="btn btn-success" (click)="changeSystem('ON')">Turn On System</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="row clearfix row-deck">
-                   
-                   
-                    <div cl ass="col-lg-4 col-md-4 col-sm-12">
+                <div class="row clearfix row-deck" *ngIf="getSystem === 'ON'">
+
+
+                    <div cl ass="col-lg-4 col-md-4 col-sm-12" *ngIf="getMode === 'manual'">
                         <div class="card">
                             <div class="header">
                                 <h2>Mode Manuel (pompe)</h2>
@@ -444,7 +465,7 @@
                                             role="button">
                                             <i class="zmdi zmdi-more-vert"></i>
                                         </a>
-                                       
+
                                     </li>
                                 </ul>
                             </div>
@@ -453,42 +474,51 @@
                                     <li class="d-flex justify-content-between list-group-item align-items-center">
                                         <h6 class="mb-0">POMPE</h6>
                                         <label class="toggle-switch">
-                                            <input type="checkbox">
+                                            <input type="checkbox" [checked]="getpompe" (change)="changePompe($event)">
                                             <span class="toggle-switch-slider"></span>
                                         </label>
+
                                     </li>
-                                  
-                                  
+
+
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row clearfix row-deck">
+                <div class="row clearfix row-deck" *ngIf="getSystem === 'ON'">
 
-                    <div class="col-lg-4  col-sm-12" >
-                        <div class="card appliances-grp" >
+                    <div class="col-lg-4  col-sm-12">
+                        <div class="card appliances-grp">
                             <div class="body clearfix">
-                                <div class="icon"><img alt="" src="assets/capteur-de-pluie.jpg" height="200px" width="200px"></div>
+                                <div class="icon"><img alt="" src="assets/capteur-de-pluie.jpg" height="200px"
+                                        width="200px"></div>
                                 <div class="content">
                                     <h6>Captuer de pluie </h6>
-                                   
-                                    <p>Status <span class="text-warning" style="font-size: 19px;">{{getCapteurDepluie}}</span></p>
+
+                                    <p>Status <span class="text-warning"
+                                            style="font-size: 19px;">{{getCapteurDepluie}}</span></p>
                                 </div>
                             </div>
                             <div class="body clearfix">
-                                <div class="icon"><img alt="" src="assets/capteur-niveau-deau.jpg" height="100px" width="100px"></div>
+                                <div class="icon"><img alt="" src="assets/capteur-niveau-deau.jpg" height="100px"
+                                        width="100px"></div>
                                 <div class="content">
                                     <h6>capteur niveau d'eau</h6>
-                                    
-                                    <p>Status <span class="text-success" style="font-size: 19px;">{{getCapteurNiveauDeau}}</span></p>
+
+                                    <p>Status <span class="text-success"
+                                            style="font-size: 19px;">{{getCapteurNiveauDeau}}</span></p>
                                 </div>
                             </div>
                             <div class="body clearfix">
                                 <div class="icon"><img alt="" src="assets/Pompe.jpg" height="100px" width="100px"></div>
                                 <div class="content">
-                                    <h6 >Pompe</h6>
-                                    <p>Status <span class="text-primary" style="font-size: 19px;">{{getpompe}}</span></p>
+                                    <h6>Pompe</h6>
+                                    <p>Status <span *ngIf="getpompe === true" class="text-primary"
+                                            style="font-size: 19px;">OUI</span>
+                                        <span *ngIf="getpompe === false" class="text-primary"
+                                            style="font-size: 19px;">NON</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -519,9 +549,34 @@
 
                 </div>
 
-           
+
 
             </div>
         </div>
 
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <!-- Modal content here -->
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Change Humidity Level</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <!-- Your humidity form can be added here -->
+              <form #humidityForm="ngForm">
+                <div class="form-group">
+                  <label for="humidity">Humidity Level:</label>
+                  <input type="number" class="form-control" id="humidity" [(ngModel)]="humidity" name="humidity" required>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="color :black">Close</button>
+              <button type="button" class="btn btn-primary"   data-bs-dismiss="modal" style="color :black" (click)="saveChanges()">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>

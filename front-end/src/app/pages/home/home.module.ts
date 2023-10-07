@@ -4,12 +4,13 @@ import { HomeComponent } from './home.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NavbarModule } from 'src/app/components/navbar/navbar.module';
 import { AuthGuard } from 'src/app/auth.guard';
+import { FormsModule } from '@angular/forms';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent , canActivate: [AuthGuard]
+    component: HomeComponent, canActivate: [AuthGuard]
   }
 ]
 
@@ -21,8 +22,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-
-    NavbarModule
+    FormsModule,
+    NavbarModule,
+    
   ]
 })
 export class HomeModule { }

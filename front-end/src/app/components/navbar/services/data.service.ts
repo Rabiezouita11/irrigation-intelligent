@@ -155,4 +155,18 @@ export class DataService {
   changeMode(mode: string) {
     return this.httpClient.put<any>('http://localhost:5000/changeMode', { mode });
   }
+  
+  changePompe(pompe: boolean) {
+    return this.httpClient.put<any>('http://localhost:5000/changePompe', { pompe });
+  }
+  changeSystem(System: string) {
+    return this.httpClient.put<any>('http://localhost:5000/changeSystem', { System });
+  }
+  changerHumiditerAgriculture(status: number | undefined) {
+    return this.httpClient.put<any>('http://localhost:5000/changerHumiditerAgriculture', { status });
+  }
+
+
+  
+  
 }

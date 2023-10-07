@@ -29,8 +29,9 @@ const getStatusSystem = require('./firebase/getStatusSystem');
 
 const getSystem = require('./firebase/GetSystem');
 const changeMode = require('./firebase/changeMode');
-
-
+const changePompe = require('./firebase/changePompe');
+const changeSystem = require('./firebase/changeSystem');
+const changerHumiditerAgriculture = require('./firebase/changerHumiditerAgriculture');
 
 
 
@@ -196,6 +197,45 @@ app.put("/changeMode/", function (req, res) {
     }
   });
 });
+app.put("/changePompe/", function (req, res) {
+  changePompe.changePompe(req.body,function (err,data) {
+    if (err) {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving notes.",
+      });
+    } else {
+      res.send(data);
+    }
+  });
+});
+
+app.put("/changeSystem/", function (req, res) {
+  changeSystem.changeSystem(req.body,function (err,data) {
+    if (err) {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving notes.",
+      });
+    } else {
+      res.send(data);
+    }
+  });
+});
+
+app.put("/changerHumiditerAgriculture/", function (req, res) {
+  changerHumiditerAgriculture.changerHumiditerAgriculture(req.body,function (err,data) {
+    if (err) {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving notes.",
+      });
+    } else {
+      res.send(data);
+    }
+  });
+});
+
+
+
+
 
 
 // });

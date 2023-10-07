@@ -150,4 +150,9 @@ export class DataService {
     // Make an authenticated request to your backend
     return this.httpClient.get('http://localhost:5000/Profile', { headers });
   }
+
+
+  changeMode(mode: string) {
+    return this.httpClient.put<any>('http://localhost:5000/changeMode', { mode });
+  }
 }

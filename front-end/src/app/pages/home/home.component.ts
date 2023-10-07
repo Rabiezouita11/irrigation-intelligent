@@ -8,6 +8,7 @@ import { AuthenticationService } from '../../components/navbar/services/authenti
 import { Router } from '@angular/router';
 import { WeatherService } from 'src/app/components/navbar/services/weather.service';
 import { catchError, throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 const SCRIPT_PATH_LIST = [
   "assets/bundles/libscripts.bundle.js",
@@ -35,10 +36,10 @@ export class HomeComponent implements OnInit {
   getHumiditerSol: any;
   getpompe: any;
   getHumiditerAgriculteur: any;
-
+  mode: any;
   constructor(private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
     private cdr: ChangeDetectorRef, private dataService: DataService, private ScriptServiceService: ScriptService,
-    private renderer: Renderer2, private authenticationService: AuthenticationService, private router: Router, private weatherService: WeatherService
+    private renderer: Renderer2, private authenticationService: AuthenticationService, private router: Router, private weatherService: WeatherService, private toastrService: ToastrService,
 
   ) { }
 
@@ -61,12 +62,14 @@ export class HomeComponent implements OnInit {
       console.log(this.currentUserEmail);
     });
     this.getCapteurDePluie();
+    this.CapteurNiveauDeau();
     this.Mode();
     this.getProfile();
     this.HimiditerSol();
     this.System();
     this.HimiditerAgriculteur();
     this.statusSystem();
+    this.pompe();
     this.weatherService.getCurrentLocation().subscribe(
       (coords) => {
         console.log(coords)
@@ -213,8 +216,24 @@ export class HomeComponent implements OnInit {
         // Manually trigger change detection
         this.cdr.detectChanges();
       }
-      
-   
+      if (message.getpompe !== undefined) {
+        // Update with the real-time data
+        this.getpompe = message.getpompe;
+
+        // Manually trigger change detection
+        this.cdr.detectChanges();
+      }
+      if (message.getCapteurNiveauDeau !== undefined) {
+        // Update with the real-time data
+        this.getCapteurNiveauDeau = message.getCapteurNiveauDeau;
+
+        // Manually trigger change detection
+        this.cdr.detectChanges();
+      }
+
+
+
+
     });
   }
   logout() {
@@ -222,5 +241,13 @@ export class HomeComponent implements OnInit {
 
     this.authenticationService.logout()
       .subscribe();
+  }
+
+  changeMode(mode: string) {
+    this.dataService.changeMode(mode).subscribe(
+
+    );
+    this.toastrService.success(mode, 'Mode System', { timeOut: 7000 }); // Display custom error message in a toast
+    this.ngOnInit();
   }
 }

@@ -28,7 +28,7 @@ const getStatusSystem = require('./firebase/getStatusSystem');
 
 
 const getSystem = require('./firebase/GetSystem');
-
+const changeMode = require('./firebase/changeMode');
 
 
 
@@ -185,7 +185,17 @@ app.get("/System/", authenticateFirebase, function (req, res) {
     res.json(initialData);
   });
 });
-
+app.put("/changeMode/", function (req, res) {
+  changeMode.changeMode(req.body,function (err,data) {
+    if (err) {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving notes.",
+      });
+    } else {
+      res.send(data);
+    }
+  });
+});
 
 
 // });

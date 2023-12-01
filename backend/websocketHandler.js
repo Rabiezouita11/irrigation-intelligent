@@ -48,7 +48,11 @@ module.exports = (wsServer) => {
     // Send the initial culture data to WebSocket clients when it changes
     sendToClients({ getpompe });
   });
-
+  firebase.database().ref('Satistique/Pompe').on('value', (snapshot) => {
+    const getSatistiquePompe= snapshot.val();
+    // Send the initial culture data to WebSocket clients when it changes
+    sendToClients({ getSatistiquePompe });
+  });
 
   
 

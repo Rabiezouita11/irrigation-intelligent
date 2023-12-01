@@ -28,7 +28,8 @@ import { FormsModule } from '@angular/forms';
     ToastrModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    NavbarModule
+    NavbarModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

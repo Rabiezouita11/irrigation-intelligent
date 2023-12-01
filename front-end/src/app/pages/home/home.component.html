@@ -362,9 +362,10 @@
                                 <span class="text-uppercase">
                                     humiditer agriculteur</span>
                                 <h4 class="mb-0 mt-2">{{getHumiditerAgriculteur}}% </h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
                                     changer Humiditer
-                                  </button>
+                                </button>
                             </div>
                             <div>
 
@@ -417,7 +418,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6"  *ngIf="getSystem === 'ON'">
+                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON'">
                         <div class="card">
                             <div class="body d-flex justify-content-between">
                                 <div>
@@ -524,6 +525,16 @@
                         </div>
                     </div>
 
+                    <div class="col-lg-4">
+                        <div class="container">
+                            <div id="chart">
+                                <canvas id="canvas"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+
+
                     <div class="col-lg-4" *ngIf="weatherdata">
                         <div class="card weather3">
                             <div class="top">
@@ -558,25 +569,28 @@
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <!-- Modal content here -->
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Change Humidity Level</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <!-- Your humidity form can be added here -->
-              <form #humidityForm="ngForm">
-                <div class="form-group">
-                  <label for="humidity">Humidity Level:</label>
-                  <input type="number" class="form-control" id="humidity" [(ngModel)]="humidity" name="humidity" required>
+            <div class="modal-content">
+                <!-- Modal content here -->
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Change Humidity Level</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-              </form>
+                <div class="modal-body">
+                    <!-- Your humidity form can be added here -->
+                    <form #humidityForm="ngForm">
+                        <div class="form-group">
+                            <label for="humidity">Humidity Level:</label>
+                            <input type="number" class="form-control" id="humidity" [(ngModel)]="humidity"
+                                name="humidity" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="color :black">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="color :black"
+                        (click)="saveChanges()">Save changes</button>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="color :black">Close</button>
-              <button type="button" class="btn btn-primary"   data-bs-dismiss="modal" style="color :black" (click)="saveChanges()">Save changes</button>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>

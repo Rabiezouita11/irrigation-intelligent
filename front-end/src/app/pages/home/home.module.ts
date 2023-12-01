@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NavbarModule } from 'src/app/components/navbar/navbar.module';
 import { AuthGuard } from 'src/app/auth.guard';
 import { FormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 
 
 const routes: Routes = [
@@ -24,7 +25,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     FormsModule,
     NavbarModule,
-    
+    NgChartsModule
   ]
 })
 export class HomeModule { }

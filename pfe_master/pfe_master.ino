@@ -8,13 +8,13 @@ unsigned long previousMillis = 0;
 unsigned long interval = 10000;
 unsigned long lastUpdate = 0;
 unsigned long updateInterval = 5000;
-float cachedTemperature = 0.0; 
+float cachedTemperature = 0.0;
 #include "time.h"
 #include <IOXhop_FirebaseESP32.h>                                             // firebase library
 #include "DHT.h"
 #define DHTPIN 14
 #define DHTTYPE DHT11
-#define FIREBASE_HOST "iot-irrigation-smart-default-rtdb.firebaseio.com"    
+#define FIREBASE_HOST "iot-irrigation-smart-default-rtdb.firebaseio.com"
 #include <Wire.h>
 #define FIREBASE_AUTH "AIzaSyCba_eDDCMY7-vQREAOJY4w_DQB1_PB28A"                    // the secret key generated from firebase
 const char* NTPServer = "pool.ntp.org";
@@ -29,6 +29,11 @@ String ventilateurStatus = "";
 String moteurStatus = "";
 String pompeStatus = "";
 
+#define SYSTEM_STATUS_PATH "/Status_du_system/status"
+#define RAIN_SENSOR_STATUS_PATH "/System_irrigation_smart/Captuer_de_pluie/status"
+#define IRRIGATION_MODE_PATH "/Mode/status"
+
+enum SystemStatus { OFF, ON };
 
 String ledStatus = "";
 const int RELAY_PIN_VENTILATEUR = 13; // pin ventilateur
@@ -82,12 +87,10 @@ void setup() {
   pinMode(rainSensor, INPUT); // Définir le port du capteur de pluie comme entrée
   myservo.attach(25);
 }
-
-void loop()
-{
+void loop() {
   unsigned long currentMillis = millis();
-  // if WiFi is down, try reconnecting every CHECK_WIFI_TIME seconds
-  if ((WiFi.status() != WL_CONNECTED) && (currentMillis - previousMillis >= interval)) {
+
+  if (WiFi.status() != WL_CONNECTED && currentMillis - previousMillis >= interval) {
     Serial.print(millis());
     Serial.println("Reconnecting to WiFi...");
     wm.resetSettings();
@@ -101,14 +104,42 @@ void loop()
     Serial.println("Failed to obtain time");
     return;
   }
+
   strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
-  Firebase.setString("/Status_du_system/status", timeStringBuff);
+  Firebase.setString(SYSTEM_STATUS_PATH, timeStringBuff);
 
+  String fireStatus = Firebase.getString("/System/status");
+  String irrigationMode = Firebase.getString(IRRIGATION_MODE_PATH);
 
+  SystemStatus systemStatus = (fireStatus.equalsIgnoreCase("OFF")) ? OFF : ON;
+  if (systemStatus == ON) {
+    // Perform operations related to the system being ON
+    // ...
 
+    // Update rain sensor status
+    Firebase.setString(RAIN_SENSOR_STATUS_PATH, "high");
 
+    // Control the pump based on the irrigation mode
+    if (irrigationMode.equalsIgnoreCase("manual")) {
+      // Get the manual pump state (true or false) from Firebase
+      bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
 
+      // Perform operations based on manual pump state
+      if (manualPumpState) {
+        // Turn on the pump
+        // Code to turn on the pump
+        Serial.println("Pompe on");
+      } else {
+        // Turn off the pump
+        // Code to turn off the pump
+        Serial.println("Pompe off");
 
-
-
+      }
+    } else if (irrigationMode.equalsIgnoreCase("automatic")) {
+      // Perform automatic control of the pump based on other conditions
+      // Code for automatic pump control
+    }
+  } else {
+    Firebase.setString(RAIN_SENSOR_STATUS_PATH, "low");
+  }
 }

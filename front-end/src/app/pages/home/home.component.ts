@@ -11,6 +11,7 @@ import { catchError, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatDialog } from '@angular/material/dialog';
 import * as Chart from 'chart.js';
+import { NgZone } from '@angular/core';
 
 const SCRIPT_PATH_LIST = [
   "assets/bundles/libscripts.bundle.js",
@@ -42,37 +43,20 @@ export class HomeComponent implements OnInit {
   pompeState: boolean = false; // Initialize to the desired initial state
   humidity!: number; // You can initialize it as needed
   getSatistiquePompe: any;
-  chartData: number[] = [];
-  chartLabels: string[] = [];
+  isSystemOnlineStatus: boolean = true; // Initialize it with a default value
+ 
 
-  public barChartOptions = {
-    scaleShowVerticalLines: false,
-    responsive: true,
-  };
-  public barChartType: Chart.ChartType = 'pie';
-  public barChartLegend = true;
-  chart: any;
   constructor(private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
     private cdr: ChangeDetectorRef, private dataService: DataService, private ScriptServiceService: ScriptService,
-    private renderer: Renderer2, private authenticationService: AuthenticationService, private router: Router, private weatherService: WeatherService, private toastrService: ToastrService,
+    private renderer: Renderer2,  private zone: NgZone // Inject NgZone here
+,    private authenticationService: AuthenticationService, private router: Router, private weatherService: WeatherService, private toastrService: ToastrService,
 
 
   ) { }
 
   ngOnInit(): void {
  
-    this.chart =new Chart.Chart('canvas', {
-      type: 'line',
-      data: {
-        labels: this.chartLabels,
-        datasets: [{
-          label: 'Pompe Work Count',
-          data: this.chartData,
-          backgroundColor: 'rgba(0, 0, 0, 0)',
-          borderColor: 'rgb(255, 99, 132)',
-        }]
-      }
-    });
+   
 
 
       // console.log('data.status' +   message);
@@ -108,7 +92,7 @@ SCRIPT_PATH_LIST.forEach(e => {
 
 this.userService.getCurrentUserEmail().then((email) => {
   this.currentUserEmail = email;
-  console.log(this.currentUserEmail);
+  // console.log(this.currentUserEmail);
 });
 this.getCapteurDePluie();
 this.CapteurNiveauDeau();
@@ -121,11 +105,11 @@ this.statusSystem();
 this.pompe();
 this.weatherService.getCurrentLocation().subscribe(
   (coords) => {
-    console.log(coords)
+    // console.log(coords)
     this.weatherService.getWeatherDataByCoords(coords).subscribe(
       (data) => {
         this.setWeather(data);
-        console.log(data)
+        // console.log(data)
       },
       (error) => {
         console.error('Error fetching weather data:', error);
@@ -157,7 +141,7 @@ setWeather(data: any) {
 getCapteurDePluie() {
   this.dataService.getCapteurDepluie().subscribe((initialData) => {
     this.getCapteurDepluie = initialData;
-    console.log('aaa' + this.getCapteurDepluie)
+    // console.log('aaa' + this.getCapteurDepluie)
     // Initialize WebSocket connection to listen for updates
     this.initWebSocket();
   });
@@ -165,7 +149,7 @@ getCapteurDePluie() {
 Mode() {
   this.dataService.getMode().subscribe((initialData) => {
     this.getMode = initialData;
-    console.log('aaa' + this.getMode)
+    // console.log('aaa' + this.getMode)
     // Initialize WebSocket connection to listen for updates
 
   });
@@ -174,16 +158,19 @@ Mode() {
 statusSystem() {
   this.dataService.getStatusSystem().subscribe((initialData) => {
     this.getStatusSystem = initialData;
-    console.log('aaa' + this.getStatusSystem)
+    // console.log('aaa' + this.getStatusSystem)
     // Initialize WebSocket connection to listen for updates
     this.initWebSocket();
   });
 
 }
+
+
+
 System() {
   this.dataService.getSystem().subscribe((initialData) => {
     this.getSystem = initialData;
-    console.log('aaa' + this.getSystem)
+    // console.log('aaa' + this.getSystem)
     // Initialize WebSocket connection to listen for updates
     this.initWebSocket();
   });
@@ -191,7 +178,7 @@ System() {
 CapteurNiveauDeau() {
   this.dataService.getCapteurNiveauDeau().subscribe((initialData) => {
     this.getCapteurNiveauDeau = initialData;
-    console.log('aaa' + this.getCapteurNiveauDeau)
+    // console.log('aaa' + this.getCapteurNiveauDeau)
     // Initialize WebSocket connection to listen for updates
     this.initWebSocket();
   });
@@ -200,7 +187,7 @@ CapteurNiveauDeau() {
 HimiditerSol() {
   this.dataService.getHumiditerSol().subscribe((initialData) => {
     this.getHumiditerSol = initialData;
-    console.log('aaa' + this.getHumiditerSol)
+    // console.log('aaa' + this.getHumiditerSol)
     // Initialize WebSocket connection to listen for updates
     this.initWebSocket();
   });
@@ -208,7 +195,7 @@ HimiditerSol() {
 pompe() {
   this.dataService.getpompe().subscribe((initialData) => {
     this.getpompe = initialData;
-    console.log('aaa' + this.getpompe)
+    // console.log('aaa' + this.getpompe)
     // Initialize WebSocket connection to listen for updates
     this.initWebSocket();
   });
@@ -216,7 +203,7 @@ pompe() {
 HimiditerAgriculteur() {
   this.dataService.getHumiditerAgriculteur().subscribe((initialData) => {
     this.getHumiditerAgriculteur = initialData;
-    console.log('aaa' + this.getHumiditerAgriculteur)
+    // console.log('aaa' + this.getHumiditerAgriculteur)
     // Initialize WebSocket connection to listen for updates
     this.initWebSocket();
   });
@@ -237,10 +224,28 @@ getProfile() {
     })
   ).subscribe((Profiledata) => {
     this.nom = Profiledata.nom;
-    console.log(this.nom);
+    // console.log(this.nom);
     // Initialize WebSocket connection to listen for updates
   });
 }
+isSystemOnline(): boolean {
+  const formattedStatusSystem = new Date(this.getStatusSystem);
+
+  if (isNaN(formattedStatusSystem.getTime())) {
+    console.error('Invalid date format:', this.getStatusSystem);
+    this.isSystemOnlineStatus = false; // Set the status to false
+    return false;
+  }
+
+  const currentDate = new Date();
+  const timeDifferenceSeconds = Math.abs((formattedStatusSystem.getTime() - currentDate.getTime()) / 1000);
+  const isOnline = timeDifferenceSeconds <= 10;
+
+  this.isSystemOnlineStatus = isOnline; // Update the status
+
+  return isOnline;
+}
+
   private initWebSocket(): void {
   this.webSocketService.getSocket().subscribe((message) => {
 
@@ -261,11 +266,12 @@ getProfile() {
       this.cdr.detectChanges();
     }
     if (message.getStatusSystem !== undefined) {
-      // Update with the real-time data
-      this.getStatusSystem = message.getStatusSystem;
-
-      // Manually trigger change detection
-      this.cdr.detectChanges();
+      this.zone.run(() => {
+        this.getStatusSystem = message.getStatusSystem;
+        
+        // Manually trigger change detection
+        this.cdr.detectChanges();
+      });
     }
     if (message.getpompe !== undefined) {
       // Update with the real-time data
@@ -291,7 +297,7 @@ getProfile() {
     if (message.getSatistiquePompe !== undefined) {
       // Update with the real-time data
       this.getSatistiquePompe = message.getSatistiquePompe;
-console.log(this.getSatistiquePompe)
+// console.log(this.getSatistiquePompe)
       // Manually trigger change detection
       this.cdr.detectChanges();
     }
@@ -300,6 +306,7 @@ console.log(this.getSatistiquePompe)
 
   });
 }
+
 logout() {
   this.router.navigate(['signin']);
 
@@ -328,7 +335,7 @@ changePompe(event: any) {
   this.dataService.changePompe(newState).subscribe(
     (response) => {
       // Handle the response if needed
-      console.log(response);
+      // console.log(response);
     },
     (error) => {
       // Handle errors if needed
@@ -365,7 +372,9 @@ changeSystem(status: string) {
   this.ngOnInit();
 }
 saveChanges() {
-  console.log(this.humidity);
+ 
+  const maxHumidity = this.getHumiditerSol; // Replace this with the actual method to get max humidity
+  console.log(maxHumidity);
   if (this.humidity === null) {
     this.toastrService.error(`Humidity required`, 'Humidity validation', { timeOut: 7000 });
     return
@@ -380,6 +389,11 @@ saveChanges() {
     this.toastrService.error(`Please enter a valid numeric value greater than  0 for humidity.`, 'Humidity validation', { timeOut: 7000 });
     return;
   }
+  if (this.humidity > maxHumidity) {
+    this.toastrService.error(`Humidity should not exceed ${maxHumidity}%.`, 'Humidity validation', { timeOut: 7000 });
+    return;
+  }
+
   this.dataService.changerHumiditerAgriculture(this.humidity).subscribe();
   this.toastrService.success(`Humidity level changed to ${this.humidity}%`, 'Humidity Change', { timeOut: 7000 });
   this.ngOnInit();

@@ -87,59 +87,112 @@ void setup() {
   pinMode(rainSensor, INPUT); // Définir le port du capteur de pluie comme entrée
   myservo.attach(25);
 }
+
+
+
+//
+//void loop() {
+//  unsigned long currentMillis = millis();
+//
+//  if (WiFi.status() != WL_CONNECTED && currentMillis - previousMillis >= interval) {
+//    Serial.print(millis());
+//    Serial.println("Reconnecting to WiFi...");
+//    wm.resetSettings();
+//    ESP.restart();
+//    previousMillis = currentMillis;
+//    return;
+//  }
+//
+//  struct tm timeinfo;
+//  if (!getLocalTime(&timeinfo)) {
+//    Serial.println("Failed to obtain time");
+//    return;
+//  }
+//
+//  strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
+//  Firebase.setString(SYSTEM_STATUS_PATH, timeStringBuff);
+//
+//  String fireStatus = Firebase.getString("/System/status");
+//  String irrigationMode = Firebase.getString(IRRIGATION_MODE_PATH);
+//
+//  SystemStatus systemStatus = (fireStatus.equalsIgnoreCase("OFF")) ? OFF : ON;
+//  if (systemStatus == ON) {
+//    // Perform operations related to the system being ON
+//    // ...
+//
+//    // Update rain sensor status
+//  //  Firebase.setString(RAIN_SENSOR_STATUS_PATH, "high");
+//
+//    // Control the pump based on the irrigation mode
+//    if (irrigationMode.equalsIgnoreCase("manual")) {
+//      // Get the manual pump state (true or false) from Firebase
+//      bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
+//
+//      // Perform operations based on manual pump state
+//      if (manualPumpState) {
+//        // Turn on the pump
+//        // Code to turn on the pump
+//        Serial.println("Pompe on");
+//      } else {
+//        // Turn off the pump
+//        // Code to turn off the pump
+//        Serial.println("Pompe off");
+//
+//      }
+//    } else if (irrigationMode.equalsIgnoreCase("automatic")) {
+//      // Perform automatic control of the pump based on other conditions
+//      // Code for automatic pump control
+//    }
+//  } else {
+////    Firebase.setString(RAIN_SENSOR_STATUS_PATH, "low");
+//  }
+//}
 void loop() {
   unsigned long currentMillis = millis();
 
+  // Check WiFi connection only if it's been a while since the last check
   if (WiFi.status() != WL_CONNECTED && currentMillis - previousMillis >= interval) {
-    Serial.print(millis());
     Serial.println("Reconnecting to WiFi...");
     wm.resetSettings();
-    ESP.restart();
+    ESP.restart();  // Consider a more graceful WiFi reconnect strategy
     previousMillis = currentMillis;
     return;
   }
 
-  struct tm timeinfo;
-  if (!getLocalTime(&timeinfo)) {
-    Serial.println("Failed to obtain time");
-    return;
-  }
-
-  strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
-  Firebase.setString(SYSTEM_STATUS_PATH, timeStringBuff);
-
-  String fireStatus = Firebase.getString("/System/status");
-  String irrigationMode = Firebase.getString(IRRIGATION_MODE_PATH);
-
-  SystemStatus systemStatus = (fireStatus.equalsIgnoreCase("OFF")) ? OFF : ON;
-  if (systemStatus == ON) {
-    // Perform operations related to the system being ON
-    // ...
-
-    // Update rain sensor status
-    Firebase.setString(RAIN_SENSOR_STATUS_PATH, "high");
-
-    // Control the pump based on the irrigation mode
-    if (irrigationMode.equalsIgnoreCase("manual")) {
-      // Get the manual pump state (true or false) from Firebase
-      bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
-
-      // Perform operations based on manual pump state
-      if (manualPumpState) {
-        // Turn on the pump
-        // Code to turn on the pump
-        Serial.println("Pompe on");
-      } else {
-        // Turn off the pump
-        // Code to turn off the pump
-        Serial.println("Pompe off");
-
-      }
-    } else if (irrigationMode.equalsIgnoreCase("automatic")) {
-      // Perform automatic control of the pump based on other conditions
-      // Code for automatic pump control
+  // Fetch the current time only if needed
+  static unsigned long lastTimeUpdate = 0;
+  if (currentMillis - lastTimeUpdate >= updateInterval) {
+    struct tm timeinfo;
+    if (!getLocalTime(&timeinfo)) {
+      Serial.println("Failed to obtain time");
+    } else {
+      strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
+      Firebase.setString(SYSTEM_STATUS_PATH, timeStringBuff);
     }
-  } else {
-    Firebase.setString(RAIN_SENSOR_STATUS_PATH, "low");
+    lastTimeUpdate = currentMillis;
   }
+
+  // Check system status only if it's been a while since the last check
+  static unsigned long lastFirebaseCheck = 0;
+  if (currentMillis - lastFirebaseCheck >= updateInterval) {
+    String fireStatus = Firebase.getString("/System/status");
+    String irrigationMode = Firebase.getString(IRRIGATION_MODE_PATH);
+
+    SystemStatus systemStatus = (fireStatus.equalsIgnoreCase("OFF")) ? OFF : ON;
+    if (systemStatus == ON) {
+      if (irrigationMode.equalsIgnoreCase("manual")) {
+        bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
+        if (manualPumpState) {
+          Serial.println("Pompe on");
+        } else {
+          Serial.println("Pompe off");
+        }
+      } else if (irrigationMode.equalsIgnoreCase("automatic")) {
+        // Code for automatic pump control
+      }
+    }
+    lastFirebaseCheck = currentMillis;
+  }
+
+  // Add additional logic or sensor readings here if needed
 }

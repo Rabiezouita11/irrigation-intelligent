@@ -20,7 +20,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/CapteurDePluie', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/CapteurDePluie', { headers });
   }
 
 
@@ -34,7 +34,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/CapteurDeNiveauEau', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/CapteurDeNiveauEau', { headers });
   }
 
 
@@ -48,7 +48,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/Historique', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/Historique', { headers });
   }
 
   getHumiditerAgriculteur(): Observable<any> {
@@ -61,7 +61,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/HimiditerAgriculteur', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/HimiditerAgriculteur', { headers });
   }
 
 
@@ -75,7 +75,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/HimiditerSol', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/HimiditerSol', { headers });
   }
   getMode(): Observable<any> {
     // Retrieve the Firebase ID token from localStorage
@@ -87,7 +87,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/Mode', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/Mode', { headers });
   }
   getpompe(): Observable<any> {
     // Retrieve the Firebase ID token from localStorage
@@ -99,7 +99,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/Pompe', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/Pompe', { headers });
   }
   getStatusSystem(): Observable<any> {
     // Retrieve the Firebase ID token from localStorage
@@ -111,7 +111,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/StatusSystem', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/StatusSystem', { headers });
   }
   getSystem(): Observable<any> {
     // Retrieve the Firebase ID token from localStorage
@@ -123,7 +123,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/System', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/System', { headers });
   }
 
   getTemperatureAirData(): Observable<any> {
@@ -136,7 +136,7 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/getTemperatureAir', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/getTemperatureAir', { headers });
   }
   getProfile(): Observable<any> {
     // Retrieve the Firebase ID token from localStorage
@@ -148,22 +148,22 @@ export class DataService {
     });
 
     // Make an authenticated request to your backend
-    return this.httpClient.get('http://localhost:5000/Profile', { headers });
+    return this.httpClient.get('https://backend-system-irrigation-intelligent.onrender.com/Profile', { headers });
   }
 
 
   changeMode(mode: string) {
-    return this.httpClient.put<any>('http://localhost:5000/changeMode', { mode });
+    return this.httpClient.put<any>('https://backend-system-irrigation-intelligent.onrender.com/changeMode', { mode });
   }
   
   changePompe(pompe: boolean) {
-    return this.httpClient.put<any>('http://localhost:5000/changePompe', { pompe });
+    return this.httpClient.put<any>('https://backend-system-irrigation-intelligent.onrender.com/changePompe', { pompe });
   }
   changeSystem(System: string) {
-    return this.httpClient.put<any>('http://localhost:5000/changeSystem', { System });
+    return this.httpClient.put<any>('https://backend-system-irrigation-intelligent.onrender.com/changeSystem', { System });
   }
   changerHumiditerAgriculture(status: number | undefined) {
-    return this.httpClient.put<any>('http://localhost:5000/changerHumiditerAgriculture', { status });
+    return this.httpClient.put<any>('https://backend-system-irrigation-intelligent.onrender.com/changerHumiditerAgriculture', { status });
   }
 
 

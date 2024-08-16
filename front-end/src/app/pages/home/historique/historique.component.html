@@ -125,7 +125,6 @@
                     <div class="tab-pane active" id="menu">
                         <nav id="left-sidebar-nav" class="sidebar-nav">
                             <ul id="main-menu" class="metismenu li_animation_delay">
-
                                 <li>
                                     <a routerLink="/home" class="has-arrow"><span>Accueil</span></a>
 
@@ -137,7 +136,7 @@
                             </ul>
                         </nav>
                     </div>
-              
+
                     <div class="tab-pane" id="setting">
                         <h6>Choose Skin</h6>
                         <ul class="choose-skin list-unstyled">
@@ -272,11 +271,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- rightbar icon div -->
-
-
-        <!-- mani page content body part -->
         <div id="main-content">
             <div class="container-fluid">
                 <div class="block-header">
@@ -286,7 +280,7 @@
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-dashboard"></i></a>
                                 </li>
-                                <li class="breadcrumb-item">Dashboard</li>
+                                <li class="breadcrumb-item">Historique</li>
                                 <li class="breadcrumb-item active">IOT</li>
                             </ul>
                         </div>
@@ -294,287 +288,6 @@
                     </div>
                 </div>
 
-                <div class="row clearfix row-deck">
-                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON' && isSystemOnlineStatus">
-                        <div class="card number-chart">
-                            <div class="body">
-                                <span class="text-uppercase">
-                                    humiditer agriculteur</span>
-                                <h4 class="mb-0 mt-2">{{getHumiditerAgriculteur}}% </h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
-                                    changer Humiditer
-                                </button>
-                            </div>
-                            <div>
-
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON' && isSystemOnlineStatus">
-                        <div class="card number-chart">
-                            <div class="body">
-                                <span class="text-uppercase">Humiditer du sol </span>
-                                <h4 class="mb-0 mt-2">{{getHumiditerSol}}%</h4>
-                                <small class="text-muted">Analytics for last week</small>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON' && isSystemOnlineStatus">
-                        <div class="card">
-                            <div class="body d-flex justify-content-between" *ngIf="getSystem === 'ON'">
-                                <div>
-                                    <h6 class="mb-0">System Mode </h6>
-                                    <small class="text-success" style="font-size: 20px;">{{getMode}}</small><small
-                                        class="text-danger d-none">Loosed</small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-outline-danger" *ngIf="getMode === 'manual'"
-                                        (click)="changeMode('automatic')" type="button"> mode automatic</button>
-                                    <button class="btn btn-outline-success" *ngIf="getMode === 'automatic'"
-                                        (click)="changeMode('manual')" type="button">mode manual</button>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="body d-flex justify-content-between align-items-center"
-                                *ngIf="getSystem === 'ON'">
-                                <div class="status-container d-flex align-items-center">
-                                    <h6 class="mb-0 status-label">System Status</h6>
-                                    <i class="fas fa-circle status-icon"
-                                        [ngClass]="{'online': isSystemOnline(), 'offline': !isSystemOnline()}"></i>
-                                    <small class="status-text"
-                                        [ngClass]="{'online': isSystemOnline(), 'offline': !isSystemOnline()}">
-                                        {{ isSystemOnline() ? 'System is Online' : 'System is Offline' }}
-                                    </small>
-                                </div>
-                                <div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="getSystem === 'ON' && isSystemOnlineStatus">
-                        <div class="card">
-                            <div class="body d-flex justify-content-between">
-                                <div>
-                                    <h6 class="mb-0">System</h6>
-                                    <small style="font-size: 20px;"
-                                        [ngClass]="{'text-success': getSystem === 'ON', 'text-danger': getSystem !== 'ON'}">{{getSystem}}</small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-outline-danger" *ngIf="getSystem === 'ON'"
-                                        (click)="changeSystem('OFF')" type="button">System OFF</button>
-                                    <button class="btn btn-outline-success" *ngIf="getSystem === 'OFF'"
-                                        (click)="changeSystem('ON')" type="button">System ON</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-center" *ngIf="getSystem === 'OFF' && isSystemOnline()">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title text-danger">Smart Irrigation System is OFF</h5>
-                                    <p class="card-text">The IoT system is currently turned off and online. To activate
-                                        it, click the button below.</p>
-                                    <button class="btn btn-success" (click)="changeSystem('ON')">Turn On System</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center" *ngIf="!isSystemOnlineStatus ">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body text-center">
-                                    <i class="fas fa-exclamation-circle text-danger fa-3x"></i>
-                                    <h5 class="card-title text-danger">IoT System is Offline</h5>
-                                    <p class="card-text">The IoT system is currently unavailable. Please verify the
-                                        system's status and ensure it is powered on and connected.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                </div>
-                <div class="row clearfix row-deck" *ngIf="getSystem === 'ON' && isSystemOnlineStatus">
-
-
-                    <div cl ass="col-lg-4 col-md-4 col-sm-12" *ngIf="getMode === 'manual'">
-                        <div class="card">
-                            <div class="header">
-                                <h2>Mode Manuel (pompe)</h2>
-                                <ul class="header-dropdown m-r--5">
-                                    <li class="dropdown">
-                                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"
-                                            role="button">
-                                            <i class="zmdi zmdi-more-vert"></i>
-                                        </a>
-
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="body">
-                                <ul class="list-group">
-                                    <li class="d-flex justify-content-between list-group-item align-items-center">
-                                        <h6 class="mb-0">POMPE</h6>
-                                        <label class="toggle-switch">
-                                            <input type="checkbox" [checked]="getpompe" (change)="changePompe($event)">
-                                            <span class="toggle-switch-slider"></span>
-                                        </label>
-
-                                    </li>
-
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row clearfix row-deck" *ngIf="getSystem === 'ON' && isSystemOnlineStatus">
-
-                    <div class="col-lg-4  col-sm-12">
-                        <div class="card appliances-grp">
-                            <div class="body clearfix">
-                                <div class="icon"><img alt="" src="assets/capteur-de-pluie.jpg" height="200px"
-                                        width="200px"></div>
-                                <div class="content">
-                                    <h6>Captuer de pluie </h6>
-
-                                    <p>Status <span class="text-warning"
-                                            style="font-size: 19px;">{{getCapteurDepluie}}</span></p>
-                                </div>
-                            </div>
-                            <div class="body clearfix">
-                                <div class="icon"><img alt="" src="assets/capteur-niveau-deau.jpg" height="100px"
-                                        width="100px"></div>
-                                <div class="content">
-                                    <h6>capteur niveau d'eau</h6>
-
-                                    <p>Status <span class="text-success"
-                                            style="font-size: 19px;">{{getCapteurNiveauDeau}}</span></p>
-                                </div>
-                            </div>
-                            <div class="body clearfix">
-                                <div class="icon"><img alt="" src="assets/Pompe.jpg" height="100px" width="100px"></div>
-                                <div class="content">
-                                    <h6>Pompe</h6>
-                                    <p>Status <span *ngIf="getpompe === true" class="text-primary"
-                                            style="font-size: 19px;">OUI</span>
-                                        <span *ngIf="getpompe === false" class="text-primary"
-                                            style="font-size: 19px;">NON</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-4 col-sm-12">
-                        <div>
-                            <h3 class="chart-title">Soil Humidity Levels</h3> <!-- Title for the chart -->
-                            <canvas baseChart [data]="gaugeData" [options]="gaugeOptions" [type]="'doughnut'">
-                            </canvas>
-
-                        </div>
-                    </div>
-                    <div *ngIf="weatherData" class="weather-container">
-                        <h2 class="weather-title">Weather Data</h2>
-                        
-                        <div *ngIf="weatherData" class="weather-info">
-                            <p><strong>Temperature:</strong> {{ weatherData.timelines.minutely[0].values.temperature }} °C</p>
-                            <p><strong>Humidity:</strong> {{ weatherData.timelines.minutely[0].values.humidity }} %</p>
-                            <p><strong>Cloud Cover:</strong> {{ weatherData.timelines.minutely[0].values.cloudCover }} %</p>
-                            <p><strong>Dew Point:</strong> {{ weatherData.timelines.minutely[0].values.dewPoint }} °C</p>
-                            <!-- <p><strong>Pressure:</strong> {{ weatherData.timelines.minutely[0].values.pressureSurfaceLevel }} hPa</p> -->
-                            <p><strong>UV Index:</strong> {{ weatherData.timelines.minutely[0].values.uvIndex }}</p>
-                            <p><strong>Wind Speed:</strong> {{ weatherData.timelines.minutely[0].values.windSpeed }} m/s</p>
-                          </div>
-                          
-                        <!-- Line Chart for Weather Metrics -->
-                        <div class="chart-container">
-                            <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="'line'"></canvas>
-                        </div>
-                    </div>
-                    
-
-
-
-                    <!-- Add this section to your template -->
-
-
-
-
-
-                    <!-- <div class="col-lg-4" *ngIf="weatherdata">
-                        <div class="card weather3">
-                            <div class="top">
-                                <div class="wrapper">
-                                    <h2 class="heading" style="color:white;">{{ weatherdata.weather }}</h2>
-                                    <h3 class="location" style="color:white;">{{ weatherdata.city_name }}, {{
-                                        weatherdata.country_code }}</h3>
-                                    <p class="temp">
-                                        <span class="deg" style="color:white;">0</span>
-                                        <a href="javascript:void(0);"><span class="temp-type">C</span></a>
-                                        <span class="temp-value" style="color:white;">{{weatherdata.app_temp}}</span>
-
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div *ngIf="!weatherdata">
-                            <p>Loading weather data...</p>
-                        </div>
-                    </div> -->
-
-
-
-
-                </div>
-
-
-
             </div>
         </div>
-
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal content here -->
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Change Humidity Level</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Your humidity form can be added here -->
-                    <form #humidityForm="ngForm">
-                        <div class="form-group">
-                            <label for="humidity">Humidity Level:</label>
-                            <input type="number" class="form-control" id="humidity" [(ngModel)]="humidity"
-                                name="humidity" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="color :black">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" style="color :black"
-                        (click)="saveChanges()">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!-- rightbar icon div -->

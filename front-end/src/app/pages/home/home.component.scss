@@ -1,0 +1,101 @@
+.body {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .status-container {
+    display: flex;
+    align-items: center;
+  
+    .status-label {
+      margin-right: 10px;
+      font-size: 1rem;
+      color: #333;
+      font-weight: 600;
+    }
+  
+    .status-icon {
+      font-size: 24px; // Adjust size as needed
+      transition: color 0.3s ease;
+      margin-right: 10px;
+    }
+  
+    .status-text {
+      font-size: 0.875rem; // Smaller font size for status text
+      font-weight: 500;
+    }
+  
+    .online {
+      color: #28a745; // Green for online status
+      animation: pulse 1.5s infinite; // Apply the pulsing animation
+    }
+    
+    .offline {
+      color: #dc3545; // Red for offline status
+    }
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .weather-container {
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+    h2 {
+      font-size: 1.8rem;
+      color: #333;
+      margin-bottom: 15px;
+    }
+  
+    p {
+      font-size: 1.2rem;
+      color: #555;
+      margin: 5px 0;
+    }
+  
+    .chart-container {
+      margin-top: 20px;
+      border-top: 1px solid #ddd;
+      padding-top: 20px;
+  
+      canvas {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+  .weather-info {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  
+    p {
+      font-size: 1.2rem;
+      color: #333;
+      margin: 5px 0;
+    }
+  
+    strong {
+      color: #007bff; // Use a color that matches your theme
+    }
+  }
+  

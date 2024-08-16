@@ -62,7 +62,7 @@ export class SigninComponent implements OnInit {
       email: this.form.value.email,
       password: this.form.value.password
     }).subscribe({
-      next: (userCredential) => {
+      next: (userCredential: { user: { getIdToken: () => Promise<string>; }; }) => {
         // Handle successful sign-in here
 
         // Get the Firebase ID token from the userCredential
@@ -77,7 +77,7 @@ export class SigninComponent implements OnInit {
           });
         });
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoggingIn = false;
         console.log(error)
         const errorMessage = this.getCustomErrorMessage(error); // Get custom error message
@@ -116,7 +116,7 @@ export class SigninComponent implements OnInit {
         //   });
         this.toastrService.success('A password reset link has been sent to your email address: ' + this.form.value.email);
       },
-      error: error => {
+      error: (error: any) => {
         this.isRecoveringPassword = false;
         // this.snackBar.open(error.message, "OK", {
         //   duration: 5000

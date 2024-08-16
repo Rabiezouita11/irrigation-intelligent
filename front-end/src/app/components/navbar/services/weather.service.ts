@@ -6,9 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class WeatherService {
-  private apiKey = '7f101f5d9a62408ea03b24f788069243'; // Replace with your Weatherbit API key
-  private apiUrl = 'https://api.weatherbit.io/v2.0/';
-
+  private apiKey: string = 'N8WR0DoEgcUyZ2jQzy6JxxxbtzFmtcYe'; // Replace with your Tomorrow.io API key
+  private baseUrl: string = 'https://api.tomorrow.io/v4/weather/forecast';
   constructor(private http: HttpClient) {}
 
   getCurrentLocation(): Observable<any> {
@@ -23,15 +22,15 @@ export class WeatherService {
       );
     });
   }
+  getWeather(coords: any): Observable<any> {
 
-  getWeatherDataByCoords(coords: any): Observable<any> {
-    // Fetch weather data using the coordinates
     const params = {
       lat: coords.latitude.toString(),
       lon: coords.longitude.toString(),
       key: this.apiKey,
     };
 
-    return this.http.get(`${this.apiUrl}/current`, { params });
+    const url = `${this.baseUrl}?location=${params.lat},${params.lon}&apikey=${this.apiKey}`;
+    return this.http.get<any>(url);
   }
 }

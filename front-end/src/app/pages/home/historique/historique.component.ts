@@ -25,22 +25,33 @@ const SCRIPT_PATH_LIST = [
   styleUrls: ['./historique.component.scss']
 })
 export class HistoriqueComponent implements OnInit {
-  @ViewChild(BaseChartDirective) chart?: BaseChartDirective; // Optional chaining
- // chart chartHistoriquePompoOnData
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
- chartHistoriquePompoOnData!: ChartData<'line'>;
- chartHistoriquePompoOnOptions!: ChartOptions<'line'>;
+  chartHistoriquePompoOnData!: ChartData<'line'>;
+  chartHistoriquePompoOnOptions!: ChartOptions<'line'>;
+
+  chartHistoriquePompoOffData!: ChartData<'line'>;
+  chartHistoriquePompoOffOptions!: ChartOptions<'line'>;
+
   nom: any;
   currentUserEmail!: string | null;
   getSatistiquePompe: any;
 
-  constructor(private weatherService: WeatherService ,private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
-    private cdr: ChangeDetectorRef, private dataService: DataService, private ScriptServiceService: ScriptService,
-    private renderer: Renderer2, private zone: NgZone // Inject NgZone here
-    , private authenticationService: AuthenticationService, private router: Router, private toastrService: ToastrService,
+  constructor(
+    private weatherService: WeatherService,
+    private userService: UserService,
+    private webSocketService: WebSocketService,
+    private httpClient: HttpClient,
+    private cdr: ChangeDetectorRef,
+    private dataService: DataService,
+    private ScriptServiceService: ScriptService,
+    private renderer: Renderer2,
+    private zone: NgZone,
+    private authenticationService: AuthenticationService,
+    private router: Router,
+    private toastrService: ToastrService
+  ) {}
 
-
-  ) { }
   ngOnInit(): void {
     this.userService.getCurrentUserEmail().then((email) => {
       this.currentUserEmail = email;
@@ -51,57 +62,47 @@ export class HistoriqueComponent implements OnInit {
       const scriptElement = this.ScriptServiceService.loadJsScript(this.renderer, e);
       scriptElement.onload = () => {
         console.log('loaded');
-
       }
       scriptElement.onerror = () => {
         console.log('Could not load the script!');
       }
-
     })
     this.getHistoriquePompoOn();
-
+    this.getHistoriquePompoOff(); // Add this line
   }
 
   getHistoriquePompoOn() {
     this.dataService.getHistoriquePompoOn().subscribe((data) => {
       console.log('Historique Pompo On Data:', data);
-  
-      // Convert the object to an array of entries
+
       const entries = Object.entries(data);
-  
-      // Prepare a map to aggregate occurrences by date
       const dateMap = new Map<string, number>();
-  
-      // Aggregate occurrences by date
+
       entries.forEach(([key, timestamp]) => {
-        const date = new Date(timestamp as string).toLocaleDateString(); // Format date (e.g., "MM/DD/YYYY")
-        console.log(timestamp)
+        const date = new Date(timestamp as string).toLocaleDateString();
         if (dateMap.has(date)) {
-          dateMap.set(date, dateMap.get(date)! + 1); // Increment count
+          dateMap.set(date, dateMap.get(date)! + 1);
         } else {
-          dateMap.set(date, 1); // Initialize count
+          dateMap.set(date, 1);
         }
       });
-  
-      // Prepare labels and values for the chart
+
       const labels = Array.from(dateMap.keys());
       const values = Array.from(dateMap.values());
-  
-      // Prepare chart data
+
       this.chartHistoriquePompoOnData = {
         labels: labels,
         datasets: [
           {
             label: 'Pompo On Events',
             data: values,
-            borderColor: 'blue',
+            borderColor: 'green', // Corrected color
             backgroundColor: 'lightblue',
             fill: false,
           }
         ]
       };
-  
-      // Prepare chart options
+
       this.chartHistoriquePompoOnOptions = {
         responsive: true,
         scales: {
@@ -113,71 +114,123 @@ export class HistoriqueComponent implements OnInit {
           },
           y: {
             beginAtZero: true,
-            suggestedMax: Math.max(...values) + 1, // Adjust based on data
+            suggestedMax: Math.max(...values) + 1,
             ticks: {
-              stepSize: 1, // Ensure tick marks are at whole numbers
+              stepSize: 1,
               callback: function(value) {
-                // Display only integer values
                 return Number.isInteger(value) ? value : '';
               }
             }
           }
         }
       };
-  
-      // Update the chart if it's already rendered
+
+      if (this.chart?.chart) {
+        this.chart.chart.update();
+      }
+    });
+  }
+
+  getHistoriquePompoOff() {
+    this.dataService.getHistoriquePompoOff().subscribe((data) => {
+      console.log('Historique Pompo Off Data:', data);
+
+      const entries = Object.entries(data);
+      const dateMap = new Map<string, number>();
+
+      entries.forEach(([key, timestamp]) => {
+        const date = new Date(timestamp as string).toLocaleDateString();
+        if (dateMap.has(date)) {
+          dateMap.set(date, dateMap.get(date)! + 1);
+        } else {
+          dateMap.set(date, 1);
+        }
+      });
+
+      const labels = Array.from(dateMap.keys());
+      const values = Array.from(dateMap.values());
+
+      this.chartHistoriquePompoOffData = {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Pompo Off Events',
+            data: values,
+            borderColor: 'red', // Use a different color
+            backgroundColor: 'lightcoral',
+            fill: false,
+          }
+        ]
+      };
+
+      this.chartHistoriquePompoOffOptions = {
+        responsive: true,
+        scales: {
+          x: {
+            ticks: {
+              autoSkip: true,
+              maxTicksLimit: 10,
+            }
+          },
+          y: {
+            beginAtZero: true,
+            suggestedMax: Math.max(...values) + 1,
+            ticks: {
+              stepSize: 1,
+              callback: function(value) {
+                return Number.isInteger(value) ? value : '';
+              }
+            }
+          }
+        }
+      };
+
       if (this.chart?.chart) {
         this.chart.chart.update();
       }
       this.initWebSocket();
     });
   }
-  
-  
+
   private initWebSocket(): void {
     this.webSocketService.getSocket().subscribe((message) => {
-
-
+      console.log(message )
       if (message.getHistoriquePompoOn !== undefined) {
         this.getSatistiquePompe = message.getHistoriquePompoOn;
-        console.log("getSatistiquePompe",this.getSatistiquePompe)
+    //    console.log("getSatistiquePompe", this.getSatistiquePompe);
         this.getHistoriquePompoOn();
-        this.cdr.detectChanges(); // Consider if this is necessary
+        this.cdr.detectChanges();
+      }
+      if (message.getHistoriquePompoOff !== undefined) {
+        this.getSatistiquePompe = message.getHistoriquePompoOff;
+      //  console.log("getSatistiquePompe", this.getSatistiquePompe);
+        this.getHistoriquePompoOff();
+        this.cdr.detectChanges();
       }
 
-
-
-
+      
+      // Add WebSocket subscription for Pompo Off here if needed
     });
   }
 
-
   logout() {
     this.router.navigate(['signin']);
-
-    this.authenticationService.logout()
-      .subscribe();
+    this.authenticationService.logout().subscribe();
   }
 
   getProfile() {
     this.dataService.getProfile().pipe(
       catchError((error) => {
         if (error.status === 401) {
-          // Handle the 401 error by navigating to the sign-in page
-          this.router.navigate(['/signin']); // Make sure to import the Router module
+          this.router.navigate(['/signin']);
         } else {
-          // Handle other errors as needed
           console.error('An error occurred:', error);
         }
-
-        // Rethrow the error so that it can be caught by the subscriber
         return throwError(error);
       })
     ).subscribe((Profiledata) => {
       this.nom = Profiledata.nom;
-    console.log(this.nom);
-      // Initialize WebSocket connection to listen for updates
+      console.log(this.nom);
     });
   }
-
 }

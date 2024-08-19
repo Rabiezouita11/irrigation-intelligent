@@ -36,6 +36,11 @@ module.exports = (wsServer) => {
     sendToClients({ getHistoriquePompoOn });
   });
 
+  firebase.database().ref('System_irrigation_smart/historiquePompeOff').on('value', (snapshot) => {
+    const getHistoriquePompoOff= snapshot.val();
+ 
+    sendToClients({ getHistoriquePompoOff });
+  });
   
   firebase.database().ref('System_irrigation_smart/capteur_niveau_eau/status').on('value', (snapshot) => {
     const getCapteurNiveauDeau= snapshot.val();

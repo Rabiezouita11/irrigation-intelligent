@@ -24,6 +24,7 @@ const getMode = require('./firebase/getMode');
 
 const getpompe = require('./firebase/getpompe');
 const getHistoriquePompoOn = require('./firebase/getHistoriquePompoOn');
+const getHistoriquePompoOff = require('./firebase/getHistoriquePompoOff');
 
 const getStatusSystem = require('./firebase/getStatusSystem');
 
@@ -183,7 +184,13 @@ app.get("/getHistoriquePompoOn/", authenticateFirebase, function (req, res) {
 
   });
 });
+app.get("/getHistoriquePompoOff/", authenticateFirebase, function (req, res) {
+  getHistoriquePompoOff.getHistoriquePompoOff(function (err, initialData) {
+    res.json(initialData);
 
+
+  });
+});
 app.get("/StatusSystem/", authenticateFirebase, function (req, res) {
   getStatusSystem.getStatusSystem(function (err, initialData) {
     res.json(initialData);

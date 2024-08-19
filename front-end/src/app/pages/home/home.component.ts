@@ -428,7 +428,7 @@ export class HomeComponent implements OnInit {
     //  console.log('Time difference in seconds:', timeDifferenceSeconds);
 
     // Determine if the system is online based on the 10-second threshold
-    const isOnline = timeDifferenceSeconds > -10;
+    const isOnline = timeDifferenceSeconds > -20;
 
     // Update the system online status
     this.isSystemOnlineStatus = isOnline;

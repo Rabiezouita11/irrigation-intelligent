@@ -137,7 +137,7 @@
                             </ul>
                         </nav>
                     </div>
-              
+
                     <div class="tab-pane" id="setting">
                         <h6>Choose Skin</h6>
                         <ul class="choose-skin list-unstyled">
@@ -301,7 +301,7 @@
                                 <span class="text-uppercase">
                                     humiditer agriculteur</span>
                                 <h4 class="mb-0 mt-2">{{getHumiditerAgriculteur}}% </h4>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                <button  *ngIf=" this.getMode == 'automatic'" type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                     changer Humiditer
                                 </button>
@@ -489,25 +489,37 @@
 
                         </div>
                     </div>
+                    <!-- <div>
+                        <canvas baseChart [data]="chartHistoriquePompoOnData" [options]="chartHistoriquePompoOnOptions"
+                            chartType="line">
+                        </canvas>
+                    </div> -->
+
+
+
                     <div *ngIf="weatherData" class="weather-container">
                         <h2 class="weather-title">Weather Data</h2>
-                        
+
                         <div *ngIf="weatherData" class="weather-info">
-                            <p><strong>Temperature:</strong> {{ weatherData.timelines.minutely[0].values.temperature }} °C</p>
+                            <p><strong>Temperature:</strong> {{ weatherData.timelines.minutely[0].values.temperature }}
+                                °C</p>
                             <p><strong>Humidity:</strong> {{ weatherData.timelines.minutely[0].values.humidity }} %</p>
-                            <p><strong>Cloud Cover:</strong> {{ weatherData.timelines.minutely[0].values.cloudCover }} %</p>
-                            <p><strong>Dew Point:</strong> {{ weatherData.timelines.minutely[0].values.dewPoint }} °C</p>
+                            <p><strong>Cloud Cover:</strong> {{ weatherData.timelines.minutely[0].values.cloudCover }} %
+                            </p>
+                            <p><strong>Dew Point:</strong> {{ weatherData.timelines.minutely[0].values.dewPoint }} °C
+                            </p>
                             <!-- <p><strong>Pressure:</strong> {{ weatherData.timelines.minutely[0].values.pressureSurfaceLevel }} hPa</p> -->
                             <p><strong>UV Index:</strong> {{ weatherData.timelines.minutely[0].values.uvIndex }}</p>
-                            <p><strong>Wind Speed:</strong> {{ weatherData.timelines.minutely[0].values.windSpeed }} m/s</p>
-                          </div>
-                          
+                            <p><strong>Wind Speed:</strong> {{ weatherData.timelines.minutely[0].values.windSpeed }} m/s
+                            </p>
+                        </div>
+
                         <!-- Line Chart for Weather Metrics -->
                         <div class="chart-container">
                             <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="'line'"></canvas>
                         </div>
                     </div>
-                    
+
 
 
 

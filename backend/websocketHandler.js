@@ -28,6 +28,14 @@ module.exports = (wsServer) => {
     sendToClients({ getCapteurDepluie });
   });
 
+  firebase.database().ref('System_irrigation_smart/historiquePompeOn').on('value', (snapshot) => {
+    const getHistoriquePompoOn= snapshot.val();
+    // Send the initial culture data to WebSocket clients when it changes
+  //  console.log("Data getHistoriquePompoOngetHistoriquePompoOngetHistoriquePompoOn:", getHistoriquePompoOn);  // Log the data to the console
+
+    sendToClients({ getHistoriquePompoOn });
+  });
+
   
   firebase.database().ref('System_irrigation_smart/capteur_niveau_eau/status').on('value', (snapshot) => {
     const getCapteurNiveauDeau= snapshot.val();
@@ -51,6 +59,7 @@ module.exports = (wsServer) => {
   firebase.database().ref('Satistique/Pompe').on('value', (snapshot) => {
     const getSatistiquePompe= snapshot.val();
     // Send the initial culture data to WebSocket clients when it changes
+
     sendToClients({ getSatistiquePompe });
   });
 

@@ -23,6 +23,7 @@ const getHumiditerSol = require('./firebase/getHumiditerSol');
 const getMode = require('./firebase/getMode');
 
 const getpompe = require('./firebase/getpompe');
+const getHistoriquePompoOn = require('./firebase/getHistoriquePompoOn');
 
 const getStatusSystem = require('./firebase/getStatusSystem');
 
@@ -172,6 +173,14 @@ app.get("/Mode/", authenticateFirebase, function (req, res) {
 app.get("/Pompe/", authenticateFirebase, function (req, res) {
   getpompe.getpompe(function (err, initialData) {
     res.json(initialData);
+  });
+});
+
+app.get("/getHistoriquePompoOn/", authenticateFirebase, function (req, res) {
+  getHistoriquePompoOn.getHistoriquePompoOn(function (err, initialData) {
+    res.json(initialData);
+
+
   });
 });
 

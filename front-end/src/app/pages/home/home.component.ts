@@ -64,7 +64,15 @@ export class HomeComponent implements OnInit {
       }
     }
   };
-  
+
+
+  // chart chartHistoriquePompoOnData
+
+  chartHistoriquePompoOnData!: ChartData<'line'>;
+  chartHistoriquePompoOnOptions!: ChartOptions<'line'>;
+
+
+
   chartData!: ChartData<'line'>;
   chartOptions!: ChartOptions<'line'>;
 
@@ -92,7 +100,7 @@ export class HomeComponent implements OnInit {
 
   private getStatusSystemSubject = new BehaviorSubject<any>(null); // Initialize with null or default value
 
-  constructor(private weatherService: WeatherService ,private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
+  constructor(private weatherService: WeatherService, private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
     private cdr: ChangeDetectorRef, private dataService: DataService, private ScriptServiceService: ScriptService,
     private renderer: Renderer2, private zone: NgZone // Inject NgZone here
     , private authenticationService: AuthenticationService, private router: Router, private toastrService: ToastrService,
@@ -101,9 +109,9 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   // this.getWeather();
-   Chart.register(...registerables);
-   this.getWeather();
+    // this.getWeather();
+    Chart.register(...registerables);
+    this.getWeather();
 
     // this.weatherService.getCurrentLocation().subscribe(
     //   (coords) => {
@@ -147,6 +155,7 @@ export class HomeComponent implements OnInit {
     this.System();
     this.HimiditerAgriculteur();
     this.pompe();
+    //this.getHistoriquePompoOn();
     //  this.isSystemOnline();
     //   this.initWebSocket();
 
@@ -160,7 +169,7 @@ export class HomeComponent implements OnInit {
     this.checkSystemStatus();
 
 
-   
+
 
   }
 
@@ -227,7 +236,7 @@ export class HomeComponent implements OnInit {
           backgroundColor: 'lightpurple',
           fill: false
         },
-       
+
         {
           label: 'UV Index',
           data: uvIndexes,
@@ -374,6 +383,64 @@ export class HomeComponent implements OnInit {
       this.initWebSocket();
     });
   }
+
+  getHistoriquePompoOn() {
+    this.dataService.getHistoriquePompoOn().subscribe((data) => {
+      console.log('Historique Pompo On Data:', data);
+
+      // Convert the object to an array of entries
+      const entries = Object.entries(data);
+
+      // Prepare labels and values
+      const labels = entries.map(([key, timestamp]) => {
+        return new Date(timestamp as string).toLocaleString(); // Include both date and time
+      });
+
+      const values = entries.map(() => 1); // Assuming each entry counts as 1 occurrence
+
+      // Prepare chart data
+      this.chartHistoriquePompoOnData = {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Pompo On Events',
+            data: values,
+            borderColor: 'blue',
+            backgroundColor: 'lightblue',
+            fill: false,
+          }
+        ]
+      };
+
+      // Prepare chart options
+      this.chartHistoriquePompoOnOptions = {
+        responsive: true,
+        scales: {
+          x: {
+            ticks: {
+              autoSkip: true,
+              maxTicksLimit: 10,
+            }
+          },
+          y: {
+            beginAtZero: true,
+            suggestedMax: 5, // Adjust this based on expected max value
+          }
+        }
+      };
+
+      // Update the chart if it's already rendered
+      if (this.chart?.chart) {
+        this.chart.chart.update();
+      }
+    });
+    this.initWebSocket();
+
+  }
+
+
+
+
   HimiditerAgriculteur() {
     this.dataService.getHumiditerAgriculteur().subscribe((initialData) => {
       this.getHumiditerAgriculteur = initialData;
@@ -444,6 +511,7 @@ export class HomeComponent implements OnInit {
 
   private initWebSocket(): void {
     this.webSocketService.getSocket().subscribe((message) => {
+    //  console.log("message",message)
       //   const currentTime = new Date();
 
       if (message.getCapteurDepluie !== undefined) {
@@ -460,8 +528,8 @@ export class HomeComponent implements OnInit {
         const currentTime = new Date().toLocaleTimeString();
 
         this.getHumiditerSol = message.getHumiditerSol;
-        
-       // this.updateChart([message.getHumiditerSol], [currentTime]);
+
+        // this.updateChart([message.getHumiditerSol], [currentTime]);
         this.updateGaugeChart(message.getHumiditerSol);
 
         // Manually trigger change detection
@@ -492,13 +560,13 @@ export class HomeComponent implements OnInit {
         // Manually trigger change detection
         this.cdr.detectChanges();
       }
-      if (message.getSatistiquePompe !== undefined) {
-        // Update with the real-time data
-        this.getSatistiquePompe = message.getSatistiquePompe;
-        // console.log(this.getSatistiquePompe)
-        // Manually trigger change detection
-        this.cdr.detectChanges();
-      }
+
+      // if (message.getHistoriquePompoOn !== undefined) {
+      //   this.getSatistiquePompe = message.getHistoriquePompoOn;
+      //   console.log("getSatistiquePompe",this.getSatistiquePompe)
+      //   this.getHistoriquePompoOn();
+      //   this.cdr.detectChanges(); // Consider if this is necessary
+      // }
 
 
 

@@ -197,13 +197,13 @@ export class HistoriqueComponent implements OnInit {
       console.log(message )
       if (message.getHistoriquePompoOn !== undefined) {
         this.getSatistiquePompe = message.getHistoriquePompoOn;
-    //    console.log("getSatistiquePompe", this.getSatistiquePompe);
+        console.log("getSatistiquePompe", this.getSatistiquePompe);
         this.getHistoriquePompoOn();
         this.cdr.detectChanges();
       }
       if (message.getHistoriquePompoOff !== undefined) {
         this.getSatistiquePompe = message.getHistoriquePompoOff;
-      //  console.log("getSatistiquePompe", this.getSatistiquePompe);
+       console.log("getSatistiquePompe", this.getSatistiquePompe);
         this.getHistoriquePompoOff();
         this.cdr.detectChanges();
       }

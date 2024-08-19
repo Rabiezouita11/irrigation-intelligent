@@ -39,9 +39,13 @@ String pompeStatus = "";
 #define IRRIGATION_MODE_PATH "/Mode/status"
 #define WaterNiveauSensor "/System_irrigation_smart/capteur_niveau_eau/status"
 #define HumiditySol "/System_irrigation_smart/humidite_du_sol/value"
-#define HumidityAgriculteur "/humiditer_agriculteur/status"
-#define HISTORIQUE_POMPE_ON "/System_irrigation_smart/historiquePompeOn"
-#define HISTORIQUE_POMPE_OFF "/System_irrigation_smart/historiquePompeOff" // New path for off events
+#define HumidityAgriculteurvalue "/humiditer_agriculteur/status"
+#define HISTORIQUE_POMPE_ON "/Historique/historiquePompeOn"
+#define HISTORIQUE_POMPE_OFF "/Historique/historiquePompeOff" // New path for off events
+#define HISTORIQUE_CAPTEURWATERLEVEL "/Historique/historiqueCapteurdeWaterlevel"
+#define HISTORIQUE_CAPTEURDEPLUIE "/Historique/historiqueCapteurDEPLUIE"
+#define HISTORIQUE_POMPE "/Historique/historiquePompe"
+String previousPumpOffReasons = "";  // Stores the last reasons that triggered a push to Firebase
 
 enum SystemStatus { OFF, ON };
 
@@ -53,114 +57,147 @@ int moisturePercentage;
 bool previousPumpState = false;  // Track the previous state of the pump
 
 void setup() {
-    WiFi.mode(WIFI_STA);
-    Serial.begin(115200);
-    delay(1000);
-    Serial.println("\n");
+  WiFi.mode(WIFI_STA);
+  Serial.begin(115200);
+  delay(1000);
+  Serial.println("\n");
 
-    if (!wm.autoConnect(ssid, password))
-        Serial.println("Erreur de connexion.");
-    else
-        Serial.println("Connexion etablie!");
+  if (!wm.autoConnect(ssid, password))
+    Serial.println("Erreur de connexion.");
+  else
+    Serial.println("Connexion etablie!");
 
-    Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
-    configTime(GMTOffset_sec, DayLightOffset_sec, NTPServer);
-    pinMode(rainSensor, INPUT);
-    pinMode(RELAY_PIN_LED, OUTPUT);
-    pinMode(capteur_D, INPUT);
-    pinMode(capteur_A, INPUT);
-}
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+  configTime(GMTOffset_sec, DayLightOffset_sec, NTPServer);
+  pinMode(rainSensor, INPUT);
+  pinMode(RELAY_PIN_LED, OUTPUT);
+  pinMode(capteur_D, INPUT);
+  pinMode(capteur_A, INPUT);
+} void loop() {
+  unsigned long currentMillis = millis();
 
-void loop() {
-    unsigned long currentMillis = millis();
+  if (WiFi.status() != WL_CONNECTED && currentMillis - previousMillis >= interval) {
+    Serial.print(millis());
+    Serial.println("Reconnecting to WiFi...");
+    wm.resetSettings();
+    ESP.restart();
+    previousMillis = currentMillis;
+    return;
+  }
 
-    if (WiFi.status() != WL_CONNECTED && currentMillis - previousMillis >= interval) {
-        Serial.print(millis());
-        Serial.println("Reconnecting to WiFi...");
-        wm.resetSettings();
-        ESP.restart();
-        previousMillis = currentMillis;
-        return;
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo)) {
+    Serial.println("Failed to obtain time");
+    return;
+  }
+
+  strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
+  Firebase.setString(SYSTEM_STATUS_PATH, timeStringBuff);
+  Serial.println(timeStringBuff);
+  Serial.println(SYSTEM_STATUS_PATH);
+
+  String fireStatus = Firebase.getString("/System/status");
+  String irrigationMode = Firebase.getString(IRRIGATION_MODE_PATH);
+  int humidityAgriculteur = Firebase.getInt(HumidityAgriculteurvalue);
+  Serial.println( humidityAgriculteur);
+
+  float sensorValue = analogRead(moisturePin);
+  float moisturePercentage = map(sensorValue, 0, 4095, 100, 0);
+  Firebase.setFloat(HumiditySol, moisturePercentage);
+
+  SystemStatus systemStatus = (fireStatus.equalsIgnoreCase("OFF")) ? OFF : ON;
+
+  static String previousWaterLevelStatus = "";
+  static String previousRainSensorStatus = "";
+  static bool previousPumpState = false;
+
+  String pumpOffReasons = "";  // Reset reasons for this loop
+
+  if (systemStatus == ON) {
+    if (irrigationMode.equalsIgnoreCase("manual")) {
+      bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
+
+      if (manualPumpState && !previousPumpState) {
+        Serial.println("Pompe on");
+        digitalWrite(RELAY_PIN_LED, HIGH);
+
+        Firebase.pushString(HISTORIQUE_POMPE_ON, timeStringBuff);
+        previousPumpState = true;
+      } else if (!manualPumpState && previousPumpState) {
+        Serial.println("Pompe off");
+        digitalWrite(RELAY_PIN_LED, LOW);
+
+        Firebase.pushString(HISTORIQUE_POMPE_OFF, timeStringBuff);
+        previousPumpState = false;
+      }
+    } else if (irrigationMode.equalsIgnoreCase("automatic")) {
+      val = analogRead(FLOTTEUR_PIN);
+
+      String currentWaterLevelStatus;
+      if (val < lowThreshold) {
+        Serial.println("Water level: Low");
+        Firebase.setString(WaterNiveauSensor, "LOW");
+        currentWaterLevelStatus = "LOW";
+      } else if (val >= lowThreshold && val <= highThreshold) {
+        Serial.println("Water level: Normal");
+        Firebase.setString(WaterNiveauSensor, "MEDIUM");
+        currentWaterLevelStatus = "MEDIUM";
+      } else {
+        Serial.println("Water level: High");
+        Firebase.setString(WaterNiveauSensor, "HIGH");
+        currentWaterLevelStatus = "HIGH";
+      }
+
+      if (currentWaterLevelStatus != previousWaterLevelStatus) {
+        Firebase.pushString(HISTORIQUE_CAPTEURWATERLEVEL, currentWaterLevelStatus + " " + timeStringBuff);
+        previousWaterLevelStatus = currentWaterLevelStatus;
+      }
+
+      String currentRainSensorStatus;
+      if (digitalRead(capteur_D) == LOW) {
+        Firebase.setString(RAIN_SENSOR_STATUS_PATH, "HIGH");
+        Serial.println("Digital value: Rain detected");
+        currentRainSensorStatus = "HIGH";
+      } else {
+        Firebase.setString(RAIN_SENSOR_STATUS_PATH, "LOW");
+        Serial.println("Digital value: No rain detected");
+        currentRainSensorStatus = "LOW";
+      }
+
+      if (currentRainSensorStatus != previousRainSensorStatus) {
+        Firebase.pushString(HISTORIQUE_CAPTEURDEPLUIE, currentRainSensorStatus + " " + timeStringBuff);
+        previousRainSensorStatus = currentRainSensorStatus;
+      }
+     
+      Serial.println(humidityAgriculteur);
+      Serial.println(moisturePercentage);
+
+      if (moisturePercentage >= humidityAgriculteur) {
+        Serial.println("Turning off the pump due to adequate soil moisture.");
+        pumpOffReasons += "Moisture High, ";
+      }
+
+      if (currentWaterLevelStatus.equalsIgnoreCase("LOW")) {
+        Serial.println("Turning off the pump due to low water level.");
+        pumpOffReasons += "Water Level Low, ";
+      }
+
+      if (digitalRead(capteur_D) == LOW) {
+        Serial.println("Turning off the pump due to rain detection.");
+        pumpOffReasons += "Rain Detected, ";
+      }
+
+      if (!pumpOffReasons.isEmpty() && pumpOffReasons != previousPumpOffReasons) {
+        // Push to Firebase if the reasons have changed
+        Firebase.pushString(HISTORIQUE_POMPE, pumpOffReasons + timeStringBuff);
+        previousPumpOffReasons = pumpOffReasons;  // Update the previous reasons
+        digitalWrite(RELAY_PIN_LED, LOW);
+        previousPumpState = false;
+      } else if (moisturePercentage < humidityAgriculteur) {
+        Serial.println("Turning on the pump due to low soil moisture.");
+        digitalWrite(RELAY_PIN_LED, HIGH);
+        previousPumpState = true;
+      }
     }
-
-    struct tm timeinfo;
-    if (!getLocalTime(&timeinfo)) {
-        Serial.println("Failed to obtain time");
-        return;
-    }
-
-    strftime(timeStringBuff, sizeof(timeStringBuff), "%Y-%m-%d %H:%M:%S", &timeinfo);
-    Firebase.setString(SYSTEM_STATUS_PATH, timeStringBuff);
-    Serial.println(timeStringBuff);
-    Serial.println(SYSTEM_STATUS_PATH);
-
-    String fireStatus = Firebase.getString("/System/status");
-    String irrigationMode = Firebase.getString(IRRIGATION_MODE_PATH);
-    String humidityAgriculteur = Firebase.getString(HumidityAgriculteur);
-
-    float sensorValue = analogRead(moisturePin);
-    float moisturePercentage = map(sensorValue, 0, 4095, 100, 0);
-    Firebase.setFloat(HumiditySol, moisturePercentage);
-
-    SystemStatus systemStatus = (fireStatus.equalsIgnoreCase("OFF")) ? OFF : ON;
-
-    if (systemStatus == ON) {
-        if (irrigationMode.equalsIgnoreCase("manual")) {
-            bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
-
-            if (manualPumpState && !previousPumpState) {
-                Serial.println("Pompe on");
-                digitalWrite(RELAY_PIN_LED, HIGH);
-
-                // Save the current time to Firebase under historiquePompeOn
-                Firebase.pushString(HISTORIQUE_POMPE_ON, timeStringBuff);
-
-                // Update the previousPumpState to true
-                previousPumpState = true;
-            } else if (!manualPumpState && previousPumpState) {
-                Serial.println("Pompe off");
-                digitalWrite(RELAY_PIN_LED, LOW);
-
-                // Save the current time to Firebase under historiquePompeOff
-                Firebase.pushString(HISTORIQUE_POMPE_OFF, timeStringBuff); // Save the off event
-
-                // Update the previousPumpState to false
-                previousPumpState = false;
-            }
-        } else if (irrigationMode.equalsIgnoreCase("automatic")) {
-            val = analogRead(FLOTTEUR_PIN);
-
-            if (val < lowThreshold) {
-                Serial.println("Water level: Low");
-                Firebase.setString(WaterNiveauSensor, "LOW");
-            } else if (val >= lowThreshold && val <= highThreshold) {
-                Serial.println("Water level: Normal");
-                Firebase.setString(WaterNiveauSensor, "MEDIUM");
-            } else {
-                Serial.println("Water level: High");
-                Firebase.setString(WaterNiveauSensor, "HIGH");
-            }
-
-            String WateLevelStatus = Firebase.getString(WaterNiveauSensor);
-
-            if (digitalRead(capteur_D) == LOW) {
-                Firebase.setString(RAIN_SENSOR_STATUS_PATH, "HIGH");
-                Serial.println("Digital value: Rain detected");
-            } else {
-                Firebase.setString(RAIN_SENSOR_STATUS_PATH, "LOW");
-                Serial.println("Digital value: No rain detected");
-            }
-
-            // Check for moisture, water level, or rain first
-            if (moisturePercentage >= humidityAgriculteur.toFloat() || WateLevelStatus.equalsIgnoreCase("LOW") || digitalRead(capteur_D) == LOW) {
-                Serial.println("Turning off the pump due to adequate soil moisture, low water level, or rain detection.");
-                digitalWrite(RELAY_PIN_LED, LOW);  // Turn off the pump
-            }
-            // If the above conditions are not met, check if moisture is less than target humidity
-            else if (moisturePercentage < humidityAgriculteur.toFloat()) {
-                Serial.println("Turning on the pump due to low soil moisture.");
-                digitalWrite(RELAY_PIN_LED, HIGH); // Turn on the pump
-            }
-        }
-    }
+  }
 }

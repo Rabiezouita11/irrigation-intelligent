@@ -28,7 +28,7 @@ module.exports = (wsServer) => {
     sendToClients({ getCapteurDepluie });
   });
 
-  firebase.database().ref('System_irrigation_smart/historiquePompeOn').on('value', (snapshot) => {
+  firebase.database().ref('Historique/historiquePompeOn').on('value', (snapshot) => {
     const getHistoriquePompoOn= snapshot.val();
     // Send the initial culture data to WebSocket clients when it changes
   //  console.log("Data getHistoriquePompoOngetHistoriquePompoOngetHistoriquePompoOn:", getHistoriquePompoOn);  // Log the data to the console
@@ -36,7 +36,7 @@ module.exports = (wsServer) => {
     sendToClients({ getHistoriquePompoOn });
   });
 
-  firebase.database().ref('System_irrigation_smart/historiquePompeOff').on('value', (snapshot) => {
+  firebase.database().ref('Historique/historiquePompeOff').on('value', (snapshot) => {
     const getHistoriquePompoOff= snapshot.val();
  
     sendToClients({ getHistoriquePompoOff });

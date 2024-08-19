@@ -97,6 +97,7 @@ export class HomeComponent implements OnInit {
   humidity!: number; // You can initialize it as needed
   getSatistiquePompe: any;
   isSystemOnlineStatus: boolean = true; // Initialize it with a default value
+  isDisabled: boolean = false; // Track whether the checkbox should be disabled
 
   private getStatusSystemSubject = new BehaviorSubject<any>(null); // Initialize with null or default value
 
@@ -592,7 +593,7 @@ export class HomeComponent implements OnInit {
     const newState = event.target.checked; // Get the new state from the checkbox
 
     // Check if the water level is low and the pump is not turned on
-    if (this.getCapteurNiveauDeau === 'low') {
+    if (this.getCapteurNiveauDeau === 'LOW') {
       // Show an error toast
       this.toastrService.error('Water level is low. Verify the water level and turn on the pump if needed.', 'Error', { timeOut: 7000 });
       return; // Stop further execution

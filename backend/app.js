@@ -26,6 +26,14 @@ const getpompe = require('./firebase/getpompe');
 const getHistoriquePompoOn = require('./firebase/getHistoriquePompoOn');
 const getHistoriquePompoOff = require('./firebase/getHistoriquePompoOff');
 
+const getHistoriqueCapteurdepluie = require('./firebase/getHistoriqueCapteurdepluie');
+
+
+const getHistoriqueWaterNiveauSensor = require('./firebase/getHistoriqueWaterNiveauSensor');
+const getHistoriquePompewithcondiitons = require('./firebase/getHistoriquePompewithcondiitons');
+
+
+
 const getStatusSystem = require('./firebase/getStatusSystem');
 
 
@@ -184,6 +192,34 @@ app.get("/getHistoriquePompoOn/", authenticateFirebase, function (req, res) {
 
   });
 });
+
+app.get("/getHistoriquePompewithcondiitons/", authenticateFirebase, function (req, res) {
+  getHistoriquePompewithcondiitons.getHistoriquePompewithcondiitons(function (err, initialData) {
+    res.json(initialData);
+
+
+  });
+});
+
+
+app.get("/getHistoriqueWaterNiveauSensor/", authenticateFirebase, function (req, res) {
+  getHistoriqueWaterNiveauSensor.getHistoriqueWaterNiveauSensor(function (err, initialData) {
+    res.json(initialData);
+
+
+  });
+});
+
+
+app.get("/getHistoriqueCapteurdepluie/", authenticateFirebase, function (req, res) {
+  getHistoriqueCapteurdepluie.getHistoriqueCapteurdepluie(function (err, initialData) {
+    res.json(initialData);
+
+
+  });
+});
+
+
 app.get("/getHistoriquePompoOff/", authenticateFirebase, function (req, res) {
   getHistoriquePompoOff.getHistoriquePompoOff(function (err, initialData) {
     res.json(initialData);

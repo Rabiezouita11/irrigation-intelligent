@@ -51,6 +51,12 @@ export class DataService {
   }
 
 
+
+
+ 
+
+
+
   getCapteurNiveauDeau(): Observable<any> {
     // Retrieve the Firebase ID token from localStorage
     const firebaseIdToken = localStorage.getItem('firebaseIdToken');
@@ -192,6 +198,60 @@ export class DataService {
   changerHumiditerAgriculture(status: number | undefined) {
     return this.httpClient.put<any>('http://localhost:5000/changerHumiditerAgriculture', { status });
   }
+
+
+
+
+
+
+  getHistoriquePompewithcondiitons(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/getHistoriquePompewithcondiitons', { headers });
+  }
+
+
+
+  getHistoriqueCapteurdepluie(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/getHistoriqueCapteurdepluie', { headers });
+  }
+
+
+  getHistoriqueWaterNiveauSensor(): Observable<any> {
+    // Retrieve the Firebase ID token from localStorage
+    const firebaseIdToken = localStorage.getItem('firebaseIdToken');
+
+    // Set up the HTTP headers with the token
+    const headers = new HttpHeaders({
+      'Authorization': `${firebaseIdToken}` // Include the token in the "Bearer" format
+    });
+
+    // Make an authenticated request to your backend
+    return this.httpClient.get('http://localhost:5000/getHistoriqueWaterNiveauSensor', { headers });
+  }
+
+
+  
+
+
+
+
 
 
   

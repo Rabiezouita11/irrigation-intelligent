@@ -36,6 +36,30 @@ module.exports = (wsServer) => {
     sendToClients({ getHistoriquePompoOn });
   });
 
+  firebase.database().ref('Historique/historiqueCapteurDEPLUIE').on('value', (snapshot) => {
+    const getHistoriqueCapteurdepluie= snapshot.val();
+    // Send the initial culture data to WebSocket clients when it changes
+  //  console.log("Data getHistoriquePompoOngetHistoriquePompoOngetHistoriquePompoOn:", getHistoriquePompoOn);  // Log the data to the console
+
+    sendToClients({ getHistoriqueCapteurdepluie });
+  });
+
+  firebase.database().ref('Historique/historiqueCapteurdeWaterlevel').on('value', (snapshot) => {
+    const getHistoriqueWaterNiveauSensor= snapshot.val();
+    // Send the initial culture data to WebSocket clients when it changes
+  //  console.log("Data getHistoriquePompoOngetHistoriquePompoOngetHistoriquePompoOn:", getHistoriquePompoOn);  // Log the data to the console
+
+    sendToClients({ getHistoriqueWaterNiveauSensor });
+  });
+
+  firebase.database().ref('Historique/historiquePompe').on('value', (snapshot) => {
+    const getHistoriquePompewithcondiitons= snapshot.val();
+    // Send the initial culture data to WebSocket clients when it changes
+  //  console.log("Data getHistoriquePompoOngetHistoriquePompoOngetHistoriquePompoOn:", getHistoriquePompoOn);  // Log the data to the console
+
+    sendToClients({ getHistoriquePompewithcondiitons });
+  });
+
   firebase.database().ref('Historique/historiquePompeOff').on('value', (snapshot) => {
     const getHistoriquePompoOff= snapshot.val();
  

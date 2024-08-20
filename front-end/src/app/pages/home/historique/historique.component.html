@@ -1,24 +1,24 @@
 <body data-theme="light" class="font-nunito">
 
     <div id="wrapper" class="theme-cyan">
-      <!-- Top navbar and sidebar code here -->
-      <nav class="navbar navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-brand">
-                <button type="button" class="btn-toggle-offcanvas"><i class="fa fa-bars"></i></button>
-                <button type="button" class="btn-toggle-fullwidth"><i class="fa fa-bars"></i></button>
-                <a href="index.html">ICONIC</a>
-            </div>
+        <!-- Top navbar and sidebar code here -->
+        <nav class="navbar navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-brand">
+                    <button type="button" class="btn-toggle-offcanvas"><i class="fa fa-bars"></i></button>
+                    <button type="button" class="btn-toggle-fullwidth"><i class="fa fa-bars"></i></button>
+                    <a href="index.html">ICONIC</a>
+                </div>
 
-            <div class="navbar-right">
-                <!-- <form id="navbar-search" class="navbar-form search-form">
+                <div class="navbar-right">
+                    <!-- <form id="navbar-search" class="navbar-form search-form">
                     <input value="" class="form-control" placeholder="Search here..." type="text">
                     <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
                 </form> -->
 
-                <div id="navbar-menu">
-                    <ul class="nav navbar-nav">
-                        <!-- <li class="dropdown">
+                    <div id="navbar-menu">
+                        <ul class="nav navbar-nav">
+                            <!-- <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
                                 <i class="fa fa-bell"></i>
                                 <span class="notification-dot"></span>
@@ -84,239 +84,285 @@
                                         notifications</a></li>
                             </ul>
                         </li> -->
-                        <li>
-                            <a (click)="logout()" class="icon-menu"><i class="fa fa-power-off"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- main left menu -->
-    <div id="left-sidebar" class="sidebar">
-        <button type="button" class="btn-toggle-offcanvas"><i class="fa fa-arrow-left"></i></button>
-        <div class="sidebar-scroll">
-            <div class="user-account">
-                <img src="assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture">
-                <div class="dropdown">
-                    <span>Welcome,</span>
-                    <a href="javascript:void(0);" class="dropdown-toggle user-name"
-                        data-toggle="dropdown"><strong>{{nom}}</strong></a>
-                    <ul class="dropdown-menu dropdown-menu-right account">
-                        <li><a href="page-profile2.html"><i class="icon-user"></i>My Profile</a></li>
-                        <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
-                        <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
-                        <li class="divider"></li>
-                        <li><a (click)="logout()"><i class="icon-power"></i>Logout</a></li>
-                    </ul>
-                </div>
-                <hr>
-
-            </div>
-            <!-- Nav tabs -->
-
-
-            <!-- Tab panes -->
-            <div class="tab-content padding-0">
-                <div class="tab-pane active" id="menu">
-                    <nav id="left-sidebar-nav" class="sidebar-nav">
-                        <ul id="main-menu" class="metismenu li_animation_delay">
                             <li>
-                                <a routerLink="/home" class="has-arrow"><span>Accueil</span></a>
-
-                            </li>
-                            <li>
-                                <a routerLink="/home/historique" class="has-arrow"><span>Historique</span></a>
-
+                                <a (click)="logout()" class="icon-menu"><i class="fa fa-power-off"></i></a>
                             </li>
                         </ul>
-                    </nav>
+                    </div>
                 </div>
+            </div>
+        </nav>
 
-                <div class="tab-pane" id="setting">
-                    <h6>Choose Skin</h6>
-                    <ul class="choose-skin list-unstyled">
-                        <li data-theme="purple">
-                            <div class="purple"></div>
-                        </li>
-                        <li data-theme="blue">
-                            <div class="blue"></div>
-                        </li>
-                        <li data-theme="cyan" class="active">
-                            <div class="cyan"></div>
-                        </li>
-                        <li data-theme="green">
-                            <div class="green"></div>
-                        </li>
-                        <li data-theme="orange">
-                            <div class="orange"></div>
-                        </li>
-                        <li data-theme="blush">
-                            <div class="blush"></div>
-                        </li>
-                        <li data-theme="red">
-                            <div class="red"></div>
-                        </li>
-                    </ul>
-
-                    <ul class="list-unstyled font_setting mt-3">
-                        <li>
-                            <label class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" name="font" value="font-nunito"
-                                    checked="">
-                                <span class="custom-control-label">Nunito Google Font</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" name="font" value="font-ubuntu">
-                                <span class="custom-control-label">Ubuntu Font</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" name="font" value="font-raleway">
-                                <span class="custom-control-label">Raleway Google Font</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" class="custom-control-input" name="font" value="font-IBMplex">
-                                <span class="custom-control-label">IBM Plex Google Font</span>
-                            </label>
-                        </li>
-                    </ul>
-
-                    <ul class="list-unstyled mt-3">
-                        <li class="d-flex align-items-center mb-2">
-                            <label class="toggle-switch theme-switch">
-                                <input type="checkbox">
-                                <span class="toggle-switch-slider"></span>
-                            </label>
-                            <span class="ml-3">Enable Dark Mode!</span>
-                        </li>
-                        <li class="d-flex align-items-center mb-2">
-                            <label class="toggle-switch theme-rtl">
-                                <input type="checkbox">
-                                <span class="toggle-switch-slider"></span>
-                            </label>
-                            <span class="ml-3">Enable RTL Mode!</span>
-                        </li>
-                        <li class="d-flex align-items-center mb-2">
-                            <label class="toggle-switch theme-high-contrast">
-                                <input type="checkbox">
-                                <span class="toggle-switch-slider"></span>
-                            </label>
-                            <span class="ml-3">Enable High Contrast Mode!</span>
-                        </li>
-                    </ul>
-
+        <!-- main left menu -->
+        <div id="left-sidebar" class="sidebar">
+            <button type="button" class="btn-toggle-offcanvas"><i class="fa fa-arrow-left"></i></button>
+            <div class="sidebar-scroll">
+                <div class="user-account">
+                    <img src="assets/images/user.png" class="rounded-circle user-photo" alt="User Profile Picture">
+                    <div class="dropdown">
+                        <span>Welcome,</span>
+                        <a href="javascript:void(0);" class="dropdown-toggle user-name"
+                            data-toggle="dropdown"><strong>{{nom}}</strong></a>
+                        <ul class="dropdown-menu dropdown-menu-right account">
+                            <li><a href="page-profile2.html"><i class="icon-user"></i>My Profile</a></li>
+                            <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
+                            <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
+                            <li class="divider"></li>
+                            <li><a (click)="logout()"><i class="icon-power"></i>Logout</a></li>
+                        </ul>
+                    </div>
                     <hr>
-                    <h6>General Settings</h6>
-                    <ul class="setting-list list-unstyled">
-                        <li>
-                            <label class="fancy-checkbox">
-                                <input type="checkbox" name="checkbox" checked>
-                                <span>Allowed Notifications</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="fancy-checkbox">
-                                <input type="checkbox" name="checkbox">
-                                <span>Offline</span>
-                            </label>
-                        </li>
-                        <li>
-                            <label class="fancy-checkbox">
-                                <input type="checkbox" name="checkbox">
-                                <span>Location Permission</span>
-                            </label>
-                        </li>
-                    </ul>
 
-                    <a href="#" target="_blank" class="btn btn-block btn-primary">Buy this item</a>
-                    <a href="https://themeforest.net/user/wrraptheme/portfolio" target="_blank"
-                        class="btn btn-block btn-secondary">View portfolio</a>
                 </div>
-                <div class="tab-pane" id="question">
-                    <form>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="icon-magnifier"></i></span>
+                <!-- Nav tabs -->
+
+
+                <!-- Tab panes -->
+                <div class="tab-content padding-0">
+                    <div class="tab-pane active" id="menu">
+                        <nav id="left-sidebar-nav" class="sidebar-nav">
+                            <ul id="main-menu" class="metismenu li_animation_delay">
+                                <li>
+                                    <a routerLink="/home" class="has-arrow"><span>Accueil</span></a>
+
+                                </li>
+                                <li>
+                                    <a routerLink="/home/historique" class="has-arrow"><span>Historique</span></a>
+
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <div class="tab-pane" id="setting">
+                        <h6>Choose Skin</h6>
+                        <ul class="choose-skin list-unstyled">
+                            <li data-theme="purple">
+                                <div class="purple"></div>
+                            </li>
+                            <li data-theme="blue">
+                                <div class="blue"></div>
+                            </li>
+                            <li data-theme="cyan" class="active">
+                                <div class="cyan"></div>
+                            </li>
+                            <li data-theme="green">
+                                <div class="green"></div>
+                            </li>
+                            <li data-theme="orange">
+                                <div class="orange"></div>
+                            </li>
+                            <li data-theme="blush">
+                                <div class="blush"></div>
+                            </li>
+                            <li data-theme="red">
+                                <div class="red"></div>
+                            </li>
+                        </ul>
+
+                        <ul class="list-unstyled font_setting mt-3">
+                            <li>
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="font" value="font-nunito"
+                                        checked="">
+                                    <span class="custom-control-label">Nunito Google Font</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="font" value="font-ubuntu">
+                                    <span class="custom-control-label">Ubuntu Font</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="font" value="font-raleway">
+                                    <span class="custom-control-label">Raleway Google Font</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" class="custom-control-input" name="font" value="font-IBMplex">
+                                    <span class="custom-control-label">IBM Plex Google Font</span>
+                                </label>
+                            </li>
+                        </ul>
+
+                        <ul class="list-unstyled mt-3">
+                            <li class="d-flex align-items-center mb-2">
+                                <label class="toggle-switch theme-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-switch-slider"></span>
+                                </label>
+                                <span class="ml-3">Enable Dark Mode!</span>
+                            </li>
+                            <li class="d-flex align-items-center mb-2">
+                                <label class="toggle-switch theme-rtl">
+                                    <input type="checkbox">
+                                    <span class="toggle-switch-slider"></span>
+                                </label>
+                                <span class="ml-3">Enable RTL Mode!</span>
+                            </li>
+                            <li class="d-flex align-items-center mb-2">
+                                <label class="toggle-switch theme-high-contrast">
+                                    <input type="checkbox">
+                                    <span class="toggle-switch-slider"></span>
+                                </label>
+                                <span class="ml-3">Enable High Contrast Mode!</span>
+                            </li>
+                        </ul>
+
+                        <hr>
+                        <h6>General Settings</h6>
+                        <ul class="setting-list list-unstyled">
+                            <li>
+                                <label class="fancy-checkbox">
+                                    <input type="checkbox" name="checkbox" checked>
+                                    <span>Allowed Notifications</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="fancy-checkbox">
+                                    <input type="checkbox" name="checkbox">
+                                    <span>Offline</span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="fancy-checkbox">
+                                    <input type="checkbox" name="checkbox">
+                                    <span>Location Permission</span>
+                                </label>
+                            </li>
+                        </ul>
+
+                        <a href="#" target="_blank" class="btn btn-block btn-primary">Buy this item</a>
+                        <a href="https://themeforest.net/user/wrraptheme/portfolio" target="_blank"
+                            class="btn btn-block btn-secondary">View portfolio</a>
+                    </div>
+                    <div class="tab-pane" id="question">
+                        <form>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="icon-magnifier"></i></span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Search...">
                             </div>
-                            <input type="text" class="form-control" placeholder="Search...">
+                        </form>
+                        <ul class="list-unstyled question">
+                            <li class="menu-heading">HOW-TO</li>
+                            <li><a href="javascript:void(0);">How to Create Campaign</a></li>
+                            <li><a href="javascript:void(0);">Boost Your Sales</a></li>
+                            <li><a href="javascript:void(0);">Website Analytics</a></li>
+                            <li class="menu-heading">ACCOUNT</li>
+                            <li><a href="javascript:void(0);">Cearet New Account</a></li>
+                            <li><a href="javascript:void(0);">Change Password?</a></li>
+                            <li><a href="javascript:void(0);">Privacy &amp; Policy</a></li>
+                            <li class="menu-heading">BILLING</li>
+                            <li><a href="javascript:void(0);">Payment info</a></li>
+                            <li><a href="javascript:void(0);">Auto-Renewal</a></li>
+                            <li class="menu-button mt-3">
+                                <a href="../docs/index.html" class="btn btn-primary btn-block">Documentation</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="main-content">
+            <div class="container-fluid">
+                <div class="block-header">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <h2>iOT Dashboard</h2>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-dashboard"></i></a>
+                                </li>
+                                <li class="breadcrumb-item">Historique</li>
+                                <li class="breadcrumb-item active">IOT</li>
+                            </ul>
                         </div>
-                    </form>
-                    <ul class="list-unstyled question">
-                        <li class="menu-heading">HOW-TO</li>
-                        <li><a href="javascript:void(0);">How to Create Campaign</a></li>
-                        <li><a href="javascript:void(0);">Boost Your Sales</a></li>
-                        <li><a href="javascript:void(0);">Website Analytics</a></li>
-                        <li class="menu-heading">ACCOUNT</li>
-                        <li><a href="javascript:void(0);">Cearet New Account</a></li>
-                        <li><a href="javascript:void(0);">Change Password?</a></li>
-                        <li><a href="javascript:void(0);">Privacy &amp; Policy</a></li>
-                        <li class="menu-heading">BILLING</li>
-                        <li><a href="javascript:void(0);">Payment info</a></li>
-                        <li><a href="javascript:void(0);">Auto-Renewal</a></li>
-                        <li class="menu-button mt-3">
-                            <a href="../docs/index.html" class="btn btn-primary btn-block">Documentation</a>
-                        </li>
-                    </ul>
+                    </div>
                 </div>
+
+                <!-- Charts Container -->
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Pompe On Events</h2>
+                            </div>
+                            <div class="body">
+                                <canvas baseChart [data]="chartHistoriquePompoOnData"
+                                    [options]="chartHistoriquePompoOnOptions" [type]="'line'">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Pompe Off Events</h2>
+                            </div>
+                            <div class="body">
+                                <canvas baseChart [data]="chartHistoriquePompoOffData"
+                                    [options]="chartHistoriquePompoOffOptions" chartType="pie">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add this section in your template where you want to display the chart -->
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Capteur de pluie Events</h2>
+                            </div>
+                            <div class="body">
+                                <canvas baseChart [data]="chartHistoriqueCapteurdepluieData"
+                                    [options]="chartHistoriqueCapteurdepluieOptions" [legend]="true" chartType="'line'">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Water Niveau Sensor Events</h2>
+                            </div>
+                            <div class="body">
+                                <canvas baseChart [data]="chartHistoriqueWaterNiveauSensorData"
+                                    [options]="chartHistoriqueWaterNiveauSensorOptions" [legend]="true"
+                                    chartType="'line'">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h2>Pompe Conditions Events</h2>
+                            </div>
+                            <div class="body">
+                                <canvas baseChart [data]="chartHistoriquePompeConditionsData"
+                                    [options]="chartHistoriquePompeConditionsOptions" [legend]="true"
+                                    chartType="'line'">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
     </div>
-      <div id="main-content">
-        <div class="container-fluid">
-          <div class="block-header">
-            <div class="row">
-              <div class="col-lg-6 col-md-6 col-sm-12">
-                <h2>iOT Dashboard</h2>
-                <ul class="breadcrumb">
-                  <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-dashboard"></i></a></li>
-                  <li class="breadcrumb-item">Historique</li>
-                  <li class="breadcrumb-item active">IOT</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-  
-          <!-- Charts Container -->
-          <div class="row">
-            <div class="col-lg-6 col-md-12">
-              <div class="card">
-                <div class="header">
-                  <h2>Pompe On Events</h2>
-                </div>
-                <div class="body">
-                  <canvas baseChart
-                    [data]="chartHistoriquePompoOnData"
-                    [options]="chartHistoriquePompoOnOptions"
-                    [type]="'line'">
-                  </canvas>
-                </div>
-              </div>
-            </div>
-  
-            <div class="col-lg-6 col-md-12">
-              <div class="card">
-                <div class="header">
-                  <h2>Pompe Off Events</h2>
-                </div>
-                <div class="body">
-                  <canvas baseChart
-                    [data]="chartHistoriquePompoOffData"
-                    [options]="chartHistoriquePompoOffOptions"
-                    chartType="pie">
-                </canvas>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-  
+</body>

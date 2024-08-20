@@ -301,8 +301,8 @@
                                 <span class="text-uppercase">
                                     humiditer agriculteur</span>
                                 <h4 class="mb-0 mt-2">{{getHumiditerAgriculteur}}% </h4>
-                                <button  *ngIf=" this.getMode == 'automatic'" type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal">
+                                <button *ngIf=" this.getMode == 'automatic'" type="button" class="btn btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     changer Humiditer
                                 </button>
                             </div>
@@ -377,6 +377,55 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Check if the pump is on and display the latest record -->
+                    <div  class="weather-container"  *ngIf="getMode === 'automatic' && getSystem === 'ON' && isSystemOnlineStatus">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Latest Pump Data</h5>
+                                <p *ngIf="latestRecord.moisture&&getpompe === false">
+                                    <strong>Moisture:</strong> {{ latestRecord?.moisture }}
+                                </p>
+                                <p *ngIf="latestRecord.waterLevel&&getpompe === false">
+                                    <strong>Water Level:</strong> {{ latestRecord?.waterLevel }}
+                                </p>
+                                <p *ngIf="latestRecord.rain&&getpompe === false">
+                                    <strong>Rain:</strong> {{ latestRecord?.rain }}
+                                </p>
+                                <p *ngIf="(latestRecord.moisture || latestRecord.waterLevel || latestRecord.rain )&&getpompe === false">
+                                    <strong>Timestamp:</strong> {{ latestRecord?.timestamp }}
+                                </p>
+                                
+                                <!-- Pump Status Section -->
+                                <div class="pump-status">
+                                    <h6 class="status-title">Pump Status</h6>
+                                    <!-- Display warning if any of the record conditions are true -->
+                                    <p *ngIf="latestRecord.moisture || latestRecord.waterLevel || latestRecord.rain" class="alert alert-danger">
+                                        <strong>Warning:</strong> The pump is OFF. Please check the system immediately!
+                                    </p>
+                                    <!-- Display info if any of the record conditions are true -->
+                                    <p *ngIf="getpompe === true" class="alert alert-success">
+                                        <strong>Info:</strong> The pump is currently ON and the system is functioning.
+                                    </p>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                  
+                    
+                    <!-- Alert for pump status when it's off -->
+                  
+
+                    <!-- Optional visual cue for pump status -->
+                    
+
+                    <!-- CSS for styling -->
+                   
+
+
+
+
 
                     <div class="row justify-content-center" *ngIf="getSystem === 'OFF' && isSystemOnline()">
                         <div class="col-md-6">

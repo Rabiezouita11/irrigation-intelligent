@@ -98,7 +98,7 @@ export class HomeComponent implements OnInit {
   getSatistiquePompe: any;
   isSystemOnlineStatus: boolean = true; // Initialize it with a default value
   isDisabled: boolean = false; // Track whether the checkbox should be disabled
-
+  latestRecord: any = null;
   private getStatusSystemSubject = new BehaviorSubject<any>(null); // Initialize with null or default value
 
   constructor(private weatherService: WeatherService, private userService: UserService, private webSocketService: WebSocketService, private httpClient: HttpClient,
@@ -159,6 +159,7 @@ export class HomeComponent implements OnInit {
     //this.getHistoriquePompoOn();
     //  this.isSystemOnline();
     //   this.initWebSocket();
+    this.getLatestRecord();
 
     this.getStatusSystemSubject.subscribe(status => {
       if (status !== null) {
@@ -173,7 +174,44 @@ export class HomeComponent implements OnInit {
 
 
   }
-
+  getLatestRecord(): void {
+    this.dataService.getHistoriquePompewithcondiitons().subscribe((data: { [key: string]: string }) => {
+      console.log('Data from Firebase:', data);
+  
+      // Convert the data to an array of entries
+      const entries: [string, string][] = Object.entries(data);
+  
+      // Get the latest record based on the timestamp
+      if (entries.length > 0) {
+        const latestEntry = entries.reduce<[string, string]>((latest, entry) => {
+          const [key, value] = entry;
+          const [, , , timestamp] = value.split(', ');
+  
+          const [, , , latestTimestamp] = latest[1].split(', ');
+          
+          return new Date(timestamp) > new Date(latestTimestamp) ? entry : latest;
+        }, entries[0]);
+  
+        // Parse the latest entry
+        const [, latestValue] = latestEntry;
+        const [moisture, waterLevel, rain, timestamp] = latestValue.split(', ');
+  
+        // Update the latestRecord property with the latest data
+        this.latestRecord = {
+          moisture,
+          waterLevel,
+          rain,
+          timestamp: new Date(timestamp).toLocaleString()
+        };
+  
+        console.log('Latest Record:', this.latestRecord);
+      }
+    }, error => {
+      console.error('Error fetching data:', error);
+    });
+  }
+  
+  
   getWeather(): void {
     this.weatherService.getCurrentLocation().subscribe(
       (coords) => {
@@ -512,7 +550,7 @@ export class HomeComponent implements OnInit {
 
   private initWebSocket(): void {
     this.webSocketService.getSocket().subscribe((message) => {
-    //  console.log("message",message)
+      //  console.log("message",message)
       //   const currentTime = new Date();
 
       if (message.getCapteurDepluie !== undefined) {
@@ -561,6 +599,15 @@ export class HomeComponent implements OnInit {
         // Manually trigger change detection
         this.cdr.detectChanges();
       }
+
+      if (message.getHistoriquePompewithcondiitons !== undefined) {
+        //  this.getHistoriqueCapteurdepluiechart = message.getHistoriqueWaterNiveauSensor;
+        //   console.log("getSatistiquePompe", this.getHistoriqueCapteurdepluiechart);
+        this.getLatestRecord();
+
+        this.cdr.detectChanges();
+      }
+
 
       // if (message.getHistoriquePompoOn !== undefined) {
       //   this.getSatistiquePompe = message.getHistoriquePompoOn;

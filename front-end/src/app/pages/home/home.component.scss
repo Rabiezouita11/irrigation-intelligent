@@ -98,4 +98,47 @@
       color: #007bff; // Use a color that matches your theme
     }
   }
-  
+  .alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+    font-size: 16px;
+    font-weight: bold;
+    .alert-heading {
+        font-size: 18px;
+    }
+}
+.card-body {
+  .pump-status {
+      margin-top: 20px;
+
+      .status-title {
+          font-size: 18px;
+          font-weight: bold;
+          margin-bottom: 10px;
+      }
+
+      .alert-success {
+          background-color: #d4edda;
+          border-color: #c3e6cb;
+          color: #155724;
+          padding: 15px;
+          border-radius: 5px;
+          font-size: 16px;
+          font-weight: bold;
+      }
+
+      .alert-danger {
+          background-color: #f8d7da;
+          border-color: #f5c6cb;
+          color: #721c24;
+          padding: 15px;
+          border-radius: 5px;
+          font-size: 16px;
+          font-weight: bold;
+      }
+  }
+}

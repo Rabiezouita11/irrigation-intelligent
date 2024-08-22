@@ -1,4 +1,11 @@
-🚀 **Excited to Share My Latest Project: Smart Irrigation System!** 🌱💧
+# Smart Irrigation System
+
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![Node.js](https://img.shields.io/badge/Node.js-v14%2B-green)
+![Angular](https://img.shields.io/badge/Angular-v12%2B-red)
+![Firebase](https://img.shields.io/badge/Firebase-Enabled-orange)
+
 
 I’m thrilled to unveil my recent project—a Smart Irrigation System that integrates Angular, Node.js, Firebase, and the ESP32 microcontroller. This innovative solution is designed to optimize agricultural irrigation through both manual and automatic control. 
 

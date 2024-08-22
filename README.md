@@ -53,3 +53,52 @@ This project represents a significant step forward in smart agriculture, leverag
 Feel free to reach out if you’re interested in learning more about the project or if you have any questions! 
 
 #SmartIrrigation #Angular #NodeJS #Firebase #ESP32 #WebSockets #IoT #AgricultureTech
+
+
+### 🛠️ **Pompe Conditions Events:**
+
+![1724324800133](https://github.com/user-attachments/assets/65eee0b2-ac88-4bbe-9236-e11f92b639b5)
+
+### 🛠️ **Water Niveau Sensor Events ,Capteur de pluie Events:**
+
+![1724324794053](https://github.com/user-attachments/assets/00377c37-e897-434d-83cb-423abe57d1f6)
+
+
+### 🛠️ **Pompe Off Events ,Pompe On Events:**
+![1724324788561](https://github.com/user-attachments/assets/69cafe53-9ad6-47f5-b499-69022580727b)
+
+
+### 🛠️ **System Mode automatic : Warning: The pump is OFF. Please check the system immediately!**
+
+![1724324782915](https://github.com/user-attachments/assets/5482b2e9-e90d-4a95-a8f7-cc3a3297be46)
+
+
+### 🛠️ **Weather Data**
+
+![1724324774662](https://github.com/user-attachments/assets/3291a0b1-1492-4546-826b-593b7bdeebf6)
+
+
+### 🛠️ *System Mode manual**
+
+![1724324766673](https://github.com/user-attachments/assets/24d0bf51-a026-4c2b-8018-d7d3975aefaa)
+
+
+### 🛠️ *Smart Irrigation System is OFF**
+
+![1724324759497](https://github.com/user-attachments/assets/9776df8b-06c7-4ab9-bedb-8a5f2b1537b0)
+
+
+### 🛠️ *IoT System is Offline**
+
+![1724324748916](https://github.com/user-attachments/assets/33c69325-7b8e-4656-a83e-51c40819b775)
+
+
+### 🛠️ *systeme authentification avec firebase**
+
+![1724324737004](https://github.com/user-attachments/assets/c0fe7bcd-c38c-4c71-a22f-e62a7a542e5f)
+
+
+
+
+
+

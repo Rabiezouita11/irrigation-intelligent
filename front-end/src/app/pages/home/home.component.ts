@@ -176,42 +176,63 @@ export class HomeComponent implements OnInit {
   }
   getLatestRecord(): void {
     this.dataService.getHistoriquePompewithcondiitons().subscribe((data: { [key: string]: string }) => {
-      console.log('Data from Firebase:', data);
-  
-      // Convert the data to an array of entries
-      const entries: [string, string][] = Object.entries(data);
-  
-      // Get the latest record based on the timestamp
-      if (entries.length > 0) {
-        const latestEntry = entries.reduce<[string, string]>((latest, entry) => {
-          const [key, value] = entry;
-          const [, , , timestamp] = value.split(', ');
-  
-          const [, , , latestTimestamp] = latest[1].split(', ');
-          
-          return new Date(timestamp) > new Date(latestTimestamp) ? entry : latest;
-        }, entries[0]);
-  
-        // Parse the latest entry
-        const [, latestValue] = latestEntry;
-        const [moisture, waterLevel, rain, timestamp] = latestValue.split(', ');
-  
-        // Update the latestRecord property with the latest data
-        this.latestRecord = {
-          moisture,
-          waterLevel,
-          rain,
-          timestamp: new Date(timestamp).toLocaleString()
-        };
-  
-        console.log('Latest Record:', this.latestRecord);
-      }
+        console.log('Data from Firebase:', data);
+
+        // Convert the data to an array of entries
+        const entries: [string, string][] = Object.entries(data);
+
+        // Get the latest record based on the timestamp
+        if (entries.length > 0) {
+            const latestEntry = entries.reduce<[string, string]>((latest, entry) => {
+                const [, value] = entry;
+
+                // Extract the timestamp from the value
+                const timestamp = value.substring(value.lastIndexOf(', ') + 2); 
+                const latestTimestamp = latest[1].substring(latest[1].lastIndexOf(', ') + 2);
+
+                return new Date(timestamp) > new Date(latestTimestamp) ? entry : latest;
+            }, entries[0]);
+
+            // Parse the latest entry
+            const [, latestValue] = latestEntry;
+            const parts = latestValue.split(', ');
+
+            // Initialize default values
+            let moisture = 'N/A';
+            let waterLevel = 'N/A';
+            let rain = 'N/A';
+            let timestamp = 'N/A';
+
+            // Iterate through parts to assign correct values
+            parts.forEach(part => {
+                if (part.includes('Moisture')) {
+                    moisture = part;
+                } else if (part.includes('Water Level')) {
+                    waterLevel = part;
+                } else if (part.includes('Rain')) {
+                    rain = part;
+                } else {
+                    timestamp = part;
+                }
+            });
+
+            // Update the latestRecord property with the latest data
+            this.latestRecord = {
+                moisture,
+                waterLevel,
+                rain,
+                timestamp: new Date(timestamp).toLocaleString()
+            };
+
+            console.log('Latest Record:', this.latestRecord);
+        }
     }, error => {
-      console.error('Error fetching data:', error);
+        console.error('Error fetching data:', error);
     });
-  }
-  
-  
+}
+
+
+
   getWeather(): void {
     this.weatherService.getCurrentLocation().subscribe(
       (coords) => {

@@ -383,13 +383,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Latest Pump Data</h5>
-                                <p *ngIf="latestRecord.moisture&&getpompe === false">
+                                <p *ngIf="latestRecord.moisture&&getpompe === false && latestRecord?.moisture !=='N/A'  ">
                                     <strong>Moisture:</strong> {{ latestRecord?.moisture }}
                                 </p>
-                                <p *ngIf="latestRecord.waterLevel&&getpompe === false">
+                                <p *ngIf="latestRecord.waterLevel&&getpompe === false && latestRecord?.waterLevel !=='N/A' ">
                                     <strong>Water Level:</strong> {{ latestRecord?.waterLevel }}
                                 </p>
-                                <p *ngIf="latestRecord.rain&&getpompe === false">
+                                <p *ngIf="latestRecord.rain&&getpompe === false && latestRecord?.rain !=='N/A' ">
                                     <strong>Rain:</strong> {{ latestRecord?.rain }}
                                 </p>
                                 <p *ngIf="(latestRecord.moisture || latestRecord.waterLevel || latestRecord.rain )&&getpompe === false">

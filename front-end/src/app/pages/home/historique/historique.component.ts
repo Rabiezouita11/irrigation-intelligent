@@ -90,97 +90,107 @@ export class HistoriqueComponent implements OnInit {
   }
   getHistoriquePompewithcondiitons() {
     this.dataService.getHistoriquePompewithcondiitons().subscribe((data) => {
-      console.log('Historique getHistoriquePompewithcondiitons Data:', data);
+        console.log('Historique getHistoriquePompewithcondiitons Data:', data);
 
-      const entries = Object.entries(data);
-      const conditionMap = new Map<string, { waterLevelLow: number; moistureHigh: number; rainDetected: number }>();
+        const entries = Object.entries(data);
+        const conditionMap = new Map<string, { waterLevelLow: number; moistureHigh: number; rainDetected: number }>();
 
-      entries.forEach(([key, value]) => {
-        const [moisture, waterLevel, rain, timestamp] = (value as string).split(', ');
-        const date = new Date(timestamp).toLocaleDateString();
-        
-        if (!conditionMap.has(date)) {
-          conditionMap.set(date, { waterLevelLow: 0, moistureHigh: 0, rainDetected: 0 });
-        }
+        entries.forEach(([key, value]) => {
+            const parts = (value as string).split(', ');
+            
+            // Extract moisture, water level, rain, and timestamp
+            const moisture = parts.includes('Moisture High') ? 'Moisture High' : '';
+            const waterLevel = parts.includes('Water Level Low') ? 'Water Level Low' : '';
+            const rain = parts.includes('Rain Detected') ? 'Rain Detected' : '';
+            const timestamp = parts.slice(-1)[0];  // Assume the last part is always the timestamp
 
-        if (moisture === 'Moisture High') {
-          conditionMap.get(date)!.moistureHigh += 1;
-        }
-        if (waterLevel === 'Water Level Low') {
-          conditionMap.get(date)!.waterLevelLow += 1;
-        }
-        if (rain === 'Rain Detected') {
-          conditionMap.get(date)!.rainDetected += 1;
-        }
-      });
+            // Validate and parse the date string
+            const date = isNaN(Date.parse(timestamp)) ? 'Invalid Date' : new Date(timestamp).toLocaleDateString();
 
-      const labels = Array.from(conditionMap.keys());
-      const waterLevelLowValues = labels.map(label => conditionMap.get(label)!.waterLevelLow);
-      const moistureHighValues = labels.map(label => conditionMap.get(label)!.moistureHigh);
-      const rainDetectedValues = labels.map(label => conditionMap.get(label)!.rainDetected);
-
-      this.chartHistoriquePompeConditionsData = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Water Level Low',
-            data: waterLevelLowValues,
-            borderColor: 'blue',
-            backgroundColor: 'lightblue',
-            fill: false,
-          },
-          {
-            label: 'Moisture High',
-            data: moistureHighValues,
-            borderColor: 'orange',
-            backgroundColor: 'lightorange',
-            fill: false,
-          },
-          {
-            label: 'Rain Detected',
-            data: rainDetectedValues,
-            borderColor: 'green',
-            backgroundColor: 'lightgreen',
-            fill: false,
-          }
-        ]
-      };
-
-      this.chartHistoriquePompeConditionsOptions = {
-        responsive: true,
-        scales: {
-          x: {
-            ticks: {
-              autoSkip: true,
-              maxTicksLimit: 10,
+            if (!conditionMap.has(date)) {
+                conditionMap.set(date, { waterLevelLow: 0, moistureHigh: 0, rainDetected: 0 });
             }
-          },
-          y: {
-            beginAtZero: true,
-            suggestedMax: Math.max(...waterLevelLowValues.concat(moistureHighValues, rainDetectedValues)) + 1,
-            ticks: {
-              stepSize: 1,
-              callback: function(value) {
-                return Number.isInteger(value) ? value : '';
-              }
+
+            if (moisture === 'Moisture High') {
+                conditionMap.get(date)!.moistureHigh += 1;
             }
-          }
-        },
-        plugins: {
-          legend: {
-            display: true,
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return `${context.dataset.label}: ${context.raw}`;
-              }
+            if (waterLevel === 'Water Level Low') {
+                conditionMap.get(date)!.waterLevelLow += 1;
             }
-          }
-        }
-      };
+            if (rain === 'Rain Detected') {
+                conditionMap.get(date)!.rainDetected += 1;
+            }
+        });
+
+        const labels = Array.from(conditionMap.keys());
+        const waterLevelLowValues = labels.map(label => conditionMap.get(label)!.waterLevelLow);
+        const moistureHighValues = labels.map(label => conditionMap.get(label)!.moistureHigh);
+        const rainDetectedValues = labels.map(label => conditionMap.get(label)!.rainDetected);
+
+        this.chartHistoriquePompeConditionsData = {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Water Level Low',
+                    data: waterLevelLowValues,
+                    borderColor: 'blue',
+                    backgroundColor: 'lightblue',
+                    fill: false,
+                },
+                {
+                    label: 'Moisture High',
+                    data: moistureHighValues,
+                    borderColor: 'orange',
+                    backgroundColor: 'lightorange',
+                    fill: false,
+                },
+                {
+                    label: 'Rain Detected',
+                    data: rainDetectedValues,
+                    borderColor: 'green',
+                    backgroundColor: 'lightgreen',
+                    fill: false,
+                }
+            ]
+        };
+
+        this.chartHistoriquePompeConditionsOptions = {
+            responsive: true,
+            scales: {
+                x: {
+                    ticks: {
+                        autoSkip: true,
+                        maxTicksLimit: 10,
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: Math.max(...waterLevelLowValues.concat(moistureHighValues, rainDetectedValues)) + 1,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : '';
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.raw}`;
+                        }
+                    }
+                }
+            }
+        };
     });
-  }
+}
+
+
   getHistoriqueWaterNiveauSensor() {
     this.dataService.getHistoriqueWaterNiveauSensor().subscribe((data) => {
       console.log('Historique Water Niveau Sensor Data:', data);

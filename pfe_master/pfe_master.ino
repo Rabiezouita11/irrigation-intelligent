@@ -17,8 +17,8 @@ unsigned long updateInterval = 5000;
 #define FIREBASE_AUTH "AIzaSyCba_eDDCMY7-vQREAOJY4w_DQB1_PB28A"
 
 const char* NTPServer = "pool.ntp.org";
-const long  GMTOffset_sec = 3600;
-const int   DayLightOffset_sec = 0;
+const long GMTOffset_sec = 3600;
+const int DayLightOffset_sec = 0;
 char timeStringBuff[50];
 
 String fireStatus = "";
@@ -27,9 +27,9 @@ const int capteur_D = 4;
 const int capteur_A = A0;
 int val_analogique;
 
-#define FLOTTEUR_PIN  2
-int lowThreshold = 3350;
-int highThreshold = 3600;
+#define FLOTTEUR_PIN A0    // Assuming A0 is the correct analog pin
+int lowThreshold = 1350;   // Initial threshold for low water level
+int highThreshold = 2090;  // Initial threshold for high water level
 int val = 0;
 
 String pompeStatus = "";
@@ -41,13 +41,14 @@ String pompeStatus = "";
 #define HumiditySol "/System_irrigation_smart/humidite_du_sol/value"
 #define HumidityAgriculteurvalue "/humiditer_agriculteur/status"
 #define HISTORIQUE_POMPE_ON "/Historique/historiquePompeOn"
-#define HISTORIQUE_POMPE_OFF "/Historique/historiquePompeOff" // New path for off events
+#define HISTORIQUE_POMPE_OFF "/Historique/historiquePompeOff"  // New path for off events
 #define HISTORIQUE_CAPTEURWATERLEVEL "/Historique/historiqueCapteurdeWaterlevel"
 #define HISTORIQUE_CAPTEURDEPLUIE "/Historique/historiqueCapteurDEPLUIE"
 #define HISTORIQUE_POMPE "/Historique/historiquePompe"
 String previousPumpOffReasons = "";  // Stores the last reasons that triggered a push to Firebase
 
-enum SystemStatus { OFF, ON };
+enum SystemStatus { OFF,
+                    ON };
 
 const int rainSensor = 27;
 const int RELAY_PIN_LED = 19;
@@ -73,7 +74,9 @@ void setup() {
   pinMode(RELAY_PIN_LED, OUTPUT);
   pinMode(capteur_D, INPUT);
   pinMode(capteur_A, INPUT);
-} void loop() {
+  pinMode(FLOTTEUR_PIN, INPUT);  // Make sure to set the pinMode for the analog pin
+}
+void loop() {
   unsigned long currentMillis = millis();
 
   if (WiFi.status() != WL_CONNECTED && currentMillis - previousMillis >= interval) {
@@ -99,7 +102,7 @@ void setup() {
   String fireStatus = Firebase.getString("/System/status");
   String irrigationMode = Firebase.getString(IRRIGATION_MODE_PATH);
   int humidityAgriculteur = Firebase.getInt(HumidityAgriculteurvalue);
-  Serial.println( humidityAgriculteur);
+  Serial.println(humidityAgriculteur);
 
   float sensorValue = analogRead(moisturePin);
   float moisturePercentage = map(sensorValue, 0, 4095, 100, 0);
@@ -114,6 +117,10 @@ void setup() {
   String pumpOffReasons = "";  // Reset reasons for this loop
 
   if (systemStatus == ON) {
+
+
+
+
     if (irrigationMode.equalsIgnoreCase("manual")) {
       bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
 
@@ -131,8 +138,8 @@ void setup() {
         previousPumpState = false;
       }
     } else if (irrigationMode.equalsIgnoreCase("automatic")) {
-      val = analogRead(FLOTTEUR_PIN);
 
+      val = analogRead(FLOTTEUR_PIN);
       String currentWaterLevelStatus;
       if (val < lowThreshold) {
         Serial.println("Water level: Low");
@@ -153,6 +160,7 @@ void setup() {
         previousWaterLevelStatus = currentWaterLevelStatus;
       }
 
+
       String currentRainSensorStatus;
       if (digitalRead(capteur_D) == LOW) {
         Firebase.setString(RAIN_SENSOR_STATUS_PATH, "HIGH");
@@ -168,7 +176,7 @@ void setup() {
         Firebase.pushString(HISTORIQUE_CAPTEURDEPLUIE, currentRainSensorStatus + " " + timeStringBuff);
         previousRainSensorStatus = currentRainSensorStatus;
       }
-     
+
       Serial.println(humidityAgriculteur);
       Serial.println(moisturePercentage);
 

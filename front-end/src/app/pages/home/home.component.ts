@@ -187,7 +187,7 @@ export class HomeComponent implements OnInit {
                 const [, value] = entry;
 
                 // Extract the timestamp from the value
-                const timestamp = value.substring(value.lastIndexOf(', ') + 2); 
+                const timestamp = value.substring(value.lastIndexOf(', ') + 2);
                 const latestTimestamp = latest[1].substring(latest[1].lastIndexOf(', ') + 2);
 
                 return new Date(timestamp) > new Date(latestTimestamp) ? entry : latest;
@@ -196,32 +196,43 @@ export class HomeComponent implements OnInit {
             // Parse the latest entry
             const [, latestValue] = latestEntry;
             const parts = latestValue.split(', ');
+            console.log("parts", parts);
 
             // Initialize default values
-            let moisture = 'N/A';
-            let waterLevel = 'N/A';
-            let rain = 'N/A';
-            let timestamp = 'N/A';
+            let moisture = '';
+            let waterLevel = '';
+            let rain = '';
+            let timestamp = '';
 
-            // Iterate through parts to assign correct values
-            parts.forEach(part => {
-                if (part.includes('Moisture')) {
-                    moisture = part;
-                } else if (part.includes('Water Level')) {
-                    waterLevel = part;
-                } else if (part.includes('Rain')) {
-                    rain = part;
-                } else {
-                    timestamp = part;
-                }
-            });
+            // Check if we have more than just a timestamp
+            const isOnlyTimestamp = parts.length === 1 && !isNaN(Date.parse(parts[0]));
+            console.log("isOnlyTimestamp", isOnlyTimestamp);
+
+            if (isOnlyTimestamp) {
+                // If there's only a timestamp, set it directly
+                timestamp = parts[0];
+            } else {
+                // Iterate through parts to assign correct values
+                parts.forEach(part => {
+                    if (part.includes('Moisture')) {
+                        moisture = part;
+                    } else if (part.includes('Water Level')) {
+                        waterLevel = part;
+                    } else if (part.includes('Rain')) {
+                        rain = part;
+                    } else {
+                        // Assume the last part is the timestamp
+                        timestamp = part;
+                    }
+                });
+            }
 
             // Update the latestRecord property with the latest data
             this.latestRecord = {
-                moisture,
-                waterLevel,
-                rain,
-                timestamp: new Date(timestamp).toLocaleString()
+                moisture: moisture || 'N/A',
+                waterLevel: waterLevel || 'N/A',
+                rain: rain || 'N/A',
+                timestamp: new Date(timestamp).toLocaleString()  // Format the timestamp
             };
 
             console.log('Latest Record:', this.latestRecord);
@@ -230,6 +241,8 @@ export class HomeComponent implements OnInit {
         console.error('Error fetching data:', error);
     });
 }
+
+
 
 
 

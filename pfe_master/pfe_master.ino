@@ -122,24 +122,57 @@ void loop() {
 
 
     if (irrigationMode.equalsIgnoreCase("manual")) {
-      bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
 
-      if (manualPumpState && !previousPumpState) {
+      val = analogRead(FLOTTEUR_PIN);
+      Serial.println(val);
+
+      String currentWaterLevelStatus;
+      if (val < lowThreshold) {
+        Serial.println("Water level: Low");
+        Firebase.setString(WaterNiveauSensor, "LOW");
+        currentWaterLevelStatus = "LOW";
+      } else if (val >= lowThreshold && val <= highThreshold) {
+        Serial.println("Water level: Normal");
+        Firebase.setString(WaterNiveauSensor, "MEDIUM");
+        currentWaterLevelStatus = "MEDIUM";
+      } else {
+        Serial.println("Water level: High");
+        Firebase.setString(WaterNiveauSensor, "HIGH");
+        currentWaterLevelStatus = "HIGH";
+      }
+
+      if (currentWaterLevelStatus != previousWaterLevelStatus) {
+        Firebase.pushString(HISTORIQUE_CAPTEURWATERLEVEL, currentWaterLevelStatus + " " + timeStringBuff);
+        previousWaterLevelStatus = currentWaterLevelStatus;
+      }
+      bool manualPumpState = Firebase.getBool("/System_irrigation_smart/pompe/status");
+      if (manualPumpState) {
         Serial.println("Pompe on");
         digitalWrite(RELAY_PIN_LED, HIGH);
+
+        Firebase.pushString(HISTORIQUE_POMPE_ON, timeStringBuff);
+      } else if (!manualPumpState) {
+        Serial.println("Pompe off");
+        digitalWrite(RELAY_PIN_LED, LOW);
+
+      }
+      if (manualPumpState && !previousPumpState) {
+        Serial.println("Pompe on");
 
         Firebase.pushString(HISTORIQUE_POMPE_ON, timeStringBuff);
         previousPumpState = true;
       } else if (!manualPumpState && previousPumpState) {
         Serial.println("Pompe off");
-        digitalWrite(RELAY_PIN_LED, LOW);
 
         Firebase.pushString(HISTORIQUE_POMPE_OFF, timeStringBuff);
         previousPumpState = false;
       }
     } else if (irrigationMode.equalsIgnoreCase("automatic")) {
 
+
       val = analogRead(FLOTTEUR_PIN);
+      Serial.println(val);
+
       String currentWaterLevelStatus;
       if (val < lowThreshold) {
         Serial.println("Water level: Low");
@@ -183,25 +216,27 @@ void loop() {
       if (moisturePercentage >= humidityAgriculteur) {
         Serial.println("Turning off the pump due to adequate soil moisture.");
         pumpOffReasons += "Moisture High, ";
+        digitalWrite(RELAY_PIN_LED, LOW);
       }
 
       if (currentWaterLevelStatus.equalsIgnoreCase("LOW")) {
         Serial.println("Turning off the pump due to low water level.");
         pumpOffReasons += "Water Level Low, ";
+        digitalWrite(RELAY_PIN_LED, LOW);
       }
 
       if (digitalRead(capteur_D) == LOW) {
         Serial.println("Turning off the pump due to rain detection.");
         pumpOffReasons += "Rain Detected, ";
+        digitalWrite(RELAY_PIN_LED, LOW);
       }
-
-      if (!pumpOffReasons.isEmpty() && pumpOffReasons != previousPumpOffReasons) {
+      if (pumpOffReasons != previousPumpOffReasons) {
         // Push to Firebase if the reasons have changed
         Firebase.pushString(HISTORIQUE_POMPE, pumpOffReasons + timeStringBuff);
         previousPumpOffReasons = pumpOffReasons;  // Update the previous reasons
-        digitalWrite(RELAY_PIN_LED, LOW);
         previousPumpState = false;
-      } else if (moisturePercentage < humidityAgriculteur) {
+      }
+      if (moisturePercentage < humidityAgriculteur) {
         Serial.println("Turning on the pump due to low soil moisture.");
         digitalWrite(RELAY_PIN_LED, HIGH);
         previousPumpState = true;

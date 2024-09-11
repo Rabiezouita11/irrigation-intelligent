@@ -219,19 +219,19 @@ void loop() {
         // Priority checks for turning off the pump
         if (moisturePercentage >= humidityAgriculteur) {
           Serial.println("Turning off the pump due to adequate soil moisture.");
-          pumpOffReasons += "Moisture High, ";
+          pumpOffReasons += "Moisture High";
           shouldTurnOffPump = true;
         }
 
         if (currentWaterLevelStatus.equalsIgnoreCase("LOW")) {
           Serial.println("Turning off the pump due to low water level.");
-          pumpOffReasons += "Water Level Low, ";
+          pumpOffReasons += "Water Level Low";
           shouldTurnOffPump = true;
         }
 
         if (digitalRead(capteur_D) == LOW) {
           Serial.println("Turning off the pump due to rain detection.");
-          pumpOffReasons += "Rain Detected, ";
+          pumpOffReasons += "Rain Detected";
           shouldTurnOffPump = true;
         }
 
@@ -240,7 +240,7 @@ void loop() {
           Firebase.setBool(ETATPOMPE, false);
 
           if (pumpOffReasons != previousPumpOffReasons) {
-            Firebase.pushString(HISTORIQUE_POMPE, pumpOffReasons + timeStringBuff);
+        Firebase.pushString(HISTORIQUE_POMPE, pumpOffReasons + ", " + timeStringBuff);
             previousPumpOffReasons = pumpOffReasons;  // Update the previous reasons
           }
           previousPumpState = false;

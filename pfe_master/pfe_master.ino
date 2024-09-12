@@ -270,5 +270,7 @@ void loop() {
         previousPumpState = false;
       }
     }
+  } else {
+    digitalWrite(RELAY_PIN_LED, LOW);
   }
 }

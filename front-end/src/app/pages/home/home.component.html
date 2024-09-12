@@ -402,7 +402,7 @@
                                 <div class="pump-status">
                                     <h6 class="status-title">Pump Status</h6>
                                     <!-- Display warning if any of the record conditions are true -->
-                                    <p *ngIf="latestRecord?.moisture !=='N/A' || latestRecord?.waterLevel !=='N/A' ||latestRecord?.rain !=='N/A'" class="alert alert-danger">
+                                    <p *ngIf="(latestRecord.moisture || latestRecord.waterLevel || latestRecord.rain )&&getpompe === false" class="alert alert-danger">
                                         <strong>Warning:</strong> The pump is OFF. Please check the system immediately!
                                     </p>
                                     <!-- Display info if any of the record conditions are true -->

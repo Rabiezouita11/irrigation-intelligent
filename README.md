@@ -100,6 +100,89 @@ Feel free to reach out if you’re interested in learning more about the project
 
 
 
+# Smart Irrigation System with ESP32
+
+## Project Overview
+
+This project involves creating a smart irrigation system using an ESP32 microcontroller. The system utilizes various sensors and actuators to manage irrigation based on real-time data and user-defined settings. The ESP32 is connected to Firebase for remote monitoring and control.
+
+## Components
+
+- **ESP32 Microcontroller**: Main control unit.
+- **WiFiManager Library**: Manages WiFi connections.
+- **FirebaseESP32 Library**: Handles Firebase interactions.
+- **Various sensors and actuators**: Includes water level sensors, rain sensors, and more.
+
+## Sensors and Actuators
+
+### Water Level Sensor
+- **Pin**: `A0`
+- **Description**: Measures the water level in the reservoir. The analog value is read to determine the water level status (`LOW`, `MEDIUM`, `HIGH`).
+
+### Rain Sensor
+- **Pin**: `27`
+- **Description**: Detects rain. When the rain is detected, it sends a digital signal indicating `HIGH` (rain detected) or `LOW` (no rain).
+
+### Soil Moisture Sensor
+- **Pin**: `A3`
+- **Description**: Measures soil moisture percentage. This sensor helps in determining if irrigation is needed based on soil moisture levels.
+
+### Flotteur Sensor
+- **Pin**: `A0` (shared with Water Level Sensor)
+- **Description**: Additional water level detection; ensure this pin is correctly managed if used for multiple purposes.
+
+### Relay
+- **Pin**: `19`
+- **Description**: Controls the irrigation pump. When activated, it turns the pump ON or OFF based on the system's requirements.
+
+## Firebase Configuration
+
+- **Firebase Host**: `iot-irrigation-smart-default-rtdb.firebaseio.com`
+- **Firebase Auth**: `AIzaSyCba_eDDCMY7-vQREAOJY4w_DQB1_PB28A`
+
+## Time Configuration
+
+- **NTP Server**: `pool.ntp.org`
+- **GMT Offset**: `3600 seconds` (1 hour)
+- **Daylight Offset**: `0 seconds`
+
+## Firebase Paths
+
+- **System Status**: `/Status_du_system/status`
+- **Rain Sensor Status**: `/System_irrigation_smart/Captuer_de_pluie/status`
+- **Irrigation Mode**: `/Mode/status`
+- **Water Level Sensor Status**: `/System_irrigation_smart/capteur_niveau_eau/status`
+- **Soil Moisture**: `/System_irrigation_smart/humidite_du_sol/value`
+- **Humidity Agriculturist Value**: `/humiditer_agriculteur/status`
+- **Pump History ON**: `/Historique/historiquePompeOn`
+- **Pump History OFF**: `/Historique/historiquePompeOff`
+- **Water Level Sensor History**: `/Historique/historiqueCapteurdeWaterlevel`
+- **Rain Sensor History**: `/Historique/historiqueCapteurDEPLUIE`
+- **Pump History**: `/Historique/historiquePompe`
+- **Pump Status**: `/System_irrigation_smart/pompe/status`
+
+## Setup and Configuration
+
+1. **Install Required Libraries**: Ensure you have the `WiFiManager`, `WiFi`, `FirebaseESP32`, and `Wire` libraries installed in your Arduino IDE.
+2. **Connect to WiFi**: The ESP32 will attempt to connect to the WiFi network specified by `ssid` and `password`.
+3. **Configure Firebase**: Replace `FIREBASE_HOST` and `FIREBASE_AUTH` with your Firebase project details.
+
+## Usage
+
+- **Manual Mode**: The system can be controlled manually through Firebase. Adjust water levels and pump status as needed.
+- **Automatic Mode**: The system will automatically manage irrigation based on sensor data and pre-defined thresholds.
+
+## Troubleshooting
+
+- **Connection Issues**: Ensure WiFi credentials are correct and check for network connectivity.
+- **Sensor Calibration**: Verify sensor readings and calibrate if necessary.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+
 
 
 

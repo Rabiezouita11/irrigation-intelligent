@@ -28,8 +28,8 @@ const int capteur_A = A0;
 int val_analogique;
 
 #define FLOTTEUR_PIN A0    // Assuming A0 is the correct analog pin
-int lowThreshold = 1350;   // Initial threshold for low water level
-int highThreshold = 2090;  // Initial threshold for high water level
+int lowThreshold = 400;   // Initial threshold for low water level
+int highThreshold = 1000;  // Initial threshold for high water level
 int val = 0;
 
 String pompeStatus = "";
@@ -127,6 +127,8 @@ void loop() {
 
       // Read water level sensor value once
       val = analogRead(FLOTTEUR_PIN);
+      Serial.println("water level sensor");
+
       Serial.println(val);
 
       // Determine current water level status and only push to Firebase if changed
@@ -156,16 +158,25 @@ void loop() {
 
       Serial.println(manualPumpState);
 
-      if (manualPumpState && !previousPumpState) {
+
+
+      if (manualPumpState) {
         // Turn on the pump and record the event only if state has changed
         Serial.println("Turning pump ON");
         digitalWrite(RELAY_PIN_LED, HIGH);
+      } else if (!manualPumpState) {
+        // Turn off the pump and record the event only if state has changed
+        Serial.println("Turning pump OFF");
+        digitalWrite(RELAY_PIN_LED, LOW);
+      }
+      if (manualPumpState && !previousPumpState) {
+        // Turn on the pump and record the event only if state has changed
+        Serial.println("Turning pump ON");
         Firebase.pushString(HISTORIQUE_POMPE_ON, timeStringBuff);
         previousPumpState = true;
       } else if (!manualPumpState && previousPumpState) {
         // Turn off the pump and record the event only if state has changed
         Serial.println("Turning pump OFF");
-        digitalWrite(RELAY_PIN_LED, LOW);
         Firebase.pushString(HISTORIQUE_POMPE_OFF, timeStringBuff);
         previousPumpState = false;
       }
@@ -174,6 +185,8 @@ void loop() {
 
 
       val = analogRead(FLOTTEUR_PIN);
+      Serial.println("water niveau eau");
+
       Serial.println(val);
 
       String currentWaterLevelStatus;
